@@ -42,8 +42,8 @@ namespace BookSys.Controllers
                 response = new MyResponse { IsSuccess = false, Message = "Not legal age"  };
                 return BadRequest(response);
 
-            } else if (!person.Name.ToLower().Contains("j")){
-                response = new MyResponse { IsSuccess = false, Message = "j not found" };
+            } else if (!person.Name.ToLower().Contains("x")){
+                response = new MyResponse { IsSuccess = false, Message = "x is not found in the name string" };
                 return NotFound(response);
             }
 
@@ -55,9 +55,11 @@ namespace BookSys.Controllers
         {
             // more on data annotations later which can be displayed error message in ModelState.IsValid
             [Required]
+            [RegularExpression("^[a-zA-Z0-9_]*$", ErrorMessage ="No special characters allowed")]
             public string Name { get; set; }
 
             [Required]
+            [Range(18, 90, ErrorMessage = "Age should be between 18 to 90!")]
             public int Age { get; set; }
         }
 
