@@ -12,7 +12,7 @@ namespace BookSys.DAL.Models
         public long ID { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
+        public Guid MyGuid { get; set; }
 
         public string Title { get; set; }
 

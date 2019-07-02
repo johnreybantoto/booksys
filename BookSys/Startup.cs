@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using BookSys.DAL.Models;
 using Microsoft.EntityFrameworkCore;
+using BookSys.BLL.Services;
 
 namespace BookSys
 {
@@ -32,6 +33,9 @@ namespace BookSys
 
             services.AddDbContext<BookSysContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("BookSysContext")));
+
+            // add Services in BookSys.BLL
+            services.AddScoped<BookService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

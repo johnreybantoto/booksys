@@ -1,0 +1,62 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\PROJECTS\\BookSys\\BookSys.ViewModel\\BookSys.ViewModel.csproj": {}
+  },
+  "projects": {
+    "D:\\PROJECTS\\BookSys\\BookSys.ViewModel\\BookSys.ViewModel.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\PROJECTS\\BookSys\\BookSys.ViewModel\\BookSys.ViewModel.csproj",
+        "projectName": "BookSys.ViewModel",
+        "projectPath": "D:\\PROJECTS\\BookSys\\BookSys.ViewModel\\BookSys.ViewModel.csproj",
+        "packagesPath": "C:\\Users\\Al-mouier\\.nuget\\packages\\",
+        "outputPath": "D:\\PROJECTS\\BookSys\\BookSys.ViewModel\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Al-mouier\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp2.2"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp2.2": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp2.2": {
+          "dependencies": {
+            "Microsoft.NETCore.App": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.2.0, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461"
+          ],
+          "assetTargetFallback": true,
+          "warn": true
+        }
+      }
+    }
+  }
+}
