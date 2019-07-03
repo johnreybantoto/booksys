@@ -138,7 +138,6 @@ namespace BookSys.BLL.Services
                         }
 
                         // update changes
-                        bookToBeUpdated.MyGuid = bookVM.MyGuid;
                         bookToBeUpdated.Title = bookVM.Title;
                         bookToBeUpdated.Copyright = bookVM.Copyright;
                         context.SaveChanges();
