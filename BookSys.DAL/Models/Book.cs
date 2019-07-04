@@ -17,5 +17,9 @@ namespace BookSys.DAL.Models
         public string Title { get; set; }
 
         public int Copyright { get; set; }
+
+        [ForeignKey("Genre")]
+        public long GenreID { get; set; }
+        public Genre Genre { get; set; }
     }
 }

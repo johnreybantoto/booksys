@@ -15,7 +15,19 @@ namespace BookSys.BLL.Helpers
                 ID = book.ID,
                 MyGuid = book.MyGuid,
                 Title = book.Title,
-                Copyright = book.Copyright
+                Copyright = book.Copyright,
+                GenreID = book.GenreID,
+                Genre = Genre(book.Genre)
+            };
+        }
+
+        public GenreVM Genre(Genre genre)
+        {
+            return new GenreVM
+            {
+                ID = genre.ID,
+                MyGuid = genre.MyGuid,
+                Name = genre.Name
             };
         }
     }

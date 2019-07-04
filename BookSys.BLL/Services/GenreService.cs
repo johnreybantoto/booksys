@@ -2,7 +2,6 @@
 using BookSys.BLL.Helpers;
 using BookSys.DAL.Models;
 using BookSys.ViewModel.ViewModels;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,19 +9,19 @@ using System.Text;
 
 namespace BookSys.BLL.Services
 {
-    public class BookService : IGenericService<BookVM, long>
+    public class GenreService : IGenericService<GenreVM, long>
     {
         private ToViewModel toViewModel = new ToViewModel();
         private ToModel toModel = new ToModel();
         private readonly BookSysContext context;
 
         // inject dependencies
-        public BookService(BookSysContext _context)
+        public GenreService(BookSysContext _context)
         {
             context = _context;
         }
 
-        public ResponseVM Create(BookVM bookVM)
+        public ResponseVM Create(GenreVM genreVM)
         {
             using (context)
             {
@@ -30,20 +29,20 @@ namespace BookSys.BLL.Services
                 {
                     try
                     {
-                        // toModel.Book(bookVM) == converts to Book type then save to context
-                        bookVM.MyGuid = Guid.NewGuid();
-                        context.Books.Add(toModel.Book(bookVM));
+                        // toModel.Genre(genreVM) == converts to Genre type then save to context
+                        genreVM.MyGuid = Guid.NewGuid();
+                        context.Genres.Add(toModel.Genre(genreVM));
                         context.SaveChanges();
 
                         // commits changes to db
                         dbTransaction.Commit();
-                        return new ResponseVM("created", true, "Book");
+                        return new ResponseVM("created", true, "Genre");
                     }
                     catch (Exception ex)
                     {
                         // rollback any changes
                         dbTransaction.Rollback();
-                        return new ResponseVM("created", false, "Book", ResponseVM.SOMETHING_WENT_WRONG, "", ex);
+                        return new ResponseVM("created", false, "Genre", ResponseVM.SOMETHING_WENT_WRONG, "", ex);
                     }
                 }
             }
@@ -56,28 +55,28 @@ namespace BookSys.BLL.Services
                 {
                     try
                     {
-                        Book bookToBeDeleted = context.Books.Find(id);
-                        if (bookToBeDeleted == null)
+                        Genre genreToBeDeleted = context.Genres.Find(id);
+                        if (genreToBeDeleted == null)
                         {
-                            return new ResponseVM("deleted", false, "Book", ResponseVM.DOES_NOT_EXIST);
+                            return new ResponseVM("deleted", false, "Genre", ResponseVM.DOES_NOT_EXIST);
                         }
                         // delete from database
-                        context.Books.Remove(bookToBeDeleted);
+                        context.Genres.Remove(genreToBeDeleted);
                         context.SaveChanges();
 
                         dbTransaction.Commit();
-                        return new ResponseVM("deleted", true, "Book");
+                        return new ResponseVM("deleted", true, "Genre");
                     }
                     catch (Exception ex)
                     {
                         dbTransaction.Rollback();
-                        return new ResponseVM("deleted", false, "Book", ResponseVM.SOMETHING_WENT_WRONG, "", ex);
+                        return new ResponseVM("deleted", false, "Genre", ResponseVM.SOMETHING_WENT_WRONG, "", ex);
                     }
                 }
             }
         }
 
-        public IEnumerable<BookVM> GetAll()
+        public IEnumerable<GenreVM> GetAll()
         {
             using (context)
             {
@@ -85,12 +84,10 @@ namespace BookSys.BLL.Services
                 {
                     try
                     {
-                        // gets all books record and order from highest to lowest
-                        var books = context.Books
-                                           .Include(x => x.Genre)
-                                           .ToList().OrderByDescending(x => x.ID);
-                        var booksVm = books.Select(x => toViewModel.Book(x));
-                        return booksVm;
+                        // gets all genres record and order from highest to lowest
+                        var genres = context.Genres.ToList().OrderByDescending(x => x.ID);
+                        var genresVm = genres.Select(x => toViewModel.Genre(x));
+                        return genresVm;
                     }
                     catch (Exception)
                     {
@@ -100,7 +97,7 @@ namespace BookSys.BLL.Services
             }
         }
 
-        public BookVM GetSingleBy(long id)
+        public GenreVM GetSingleBy(long id)
         {
             using (context)
             {
@@ -109,12 +106,12 @@ namespace BookSys.BLL.Services
                     try
                     {
                         // returns one record based on passed id
-                        var book = context.Books.Find(id);
-                        BookVM bookVm = null;
-                        if(book != null)
-                            bookVm = toViewModel.Book(book);
+                        var genre = context.Genres.Find(id);
+                        GenreVM genreVm = null;
+                        if(genre != null)
+                            genreVm = toViewModel.Genre(genre);
 
-                        return bookVm;
+                        return genreVm;
                     }
                     catch (Exception)
                     {
@@ -124,7 +121,7 @@ namespace BookSys.BLL.Services
             }
         }
 
-        public ResponseVM Update(BookVM bookVM)
+        public ResponseVM Update(GenreVM genreVM)
         {
             using (context)
             {
@@ -132,26 +129,25 @@ namespace BookSys.BLL.Services
                 {
                     try
                     {
-                        // find the book from the database
-                        Book bookToBeUpdated = context.Books.Find(bookVM.ID);
+                        // find the genre from the database
+                        Genre genreToBeUpdated = context.Genres.Find(genreVM.ID);
                         // ends function then return error message
-                        if(bookToBeUpdated == null)
+                        if(genreToBeUpdated == null)
                         {
-                            return new ResponseVM("updated", false, "Book", ResponseVM.DOES_NOT_EXIST);
+                            return new ResponseVM("updated", false, "Genre", ResponseVM.DOES_NOT_EXIST);
                         }
 
                         // update changes
-                        bookToBeUpdated.Title = bookVM.Title;
-                        bookToBeUpdated.Copyright = bookVM.Copyright;
+                        genreToBeUpdated.Name = genreVM.Name;
                         context.SaveChanges();
 
                         dbTransaction.Commit();
-                        return new ResponseVM("updated", true, "Book");
+                        return new ResponseVM("updated", true, "Genre");
                     }
                     catch (Exception ex)
                     {
                         dbTransaction.Rollback();
-                        return new ResponseVM("updated", false, "Book", ResponseVM.SOMETHING_WENT_WRONG, "", ex);
+                        return new ResponseVM("updated", false, "Genre", ResponseVM.SOMETHING_WENT_WRONG, "", ex);
                     }
                 }
             }
