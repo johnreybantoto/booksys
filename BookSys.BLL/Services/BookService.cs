@@ -88,7 +88,8 @@ namespace BookSys.BLL.Services
                         // gets all books record and order from highest to lowest
                         var books = context.Books
                                            .Include(x => x.Genre)
-                                           .ToList().OrderByDescending(x => x.ID);
+                                           .ToList()
+                                           .OrderByDescending(x => x.ID);
                         var booksVm = books.Select(x => toViewModel.Book(x));
                         return booksVm;
                     }
@@ -109,7 +110,10 @@ namespace BookSys.BLL.Services
                     try
                     {
                         // returns one record based on passed id
-                        var book = context.Books.Find(id);
+                        var book = context.Books
+                                        .Include( x => x.Genre)
+                                        .Where(x => x.ID == id)
+                                        .FirstOrDefault();
                         BookVM bookVm = null;
                         if(book != null)
                             bookVm = toViewModel.Book(book);
@@ -143,6 +147,7 @@ namespace BookSys.BLL.Services
                         // update changes
                         bookToBeUpdated.Title = bookVM.Title;
                         bookToBeUpdated.Copyright = bookVM.Copyright;
+                        bookToBeUpdated.GenreID = bookVM.GenreID;
                         context.SaveChanges();
 
                         dbTransaction.Commit();
