@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using BookSys.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using BookSys.BLL.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace BookSys
 {
@@ -34,9 +35,24 @@ namespace BookSys
             services.AddDbContext<BookSysContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("BookSysContext")));
 
+            services.AddDefaultIdentity<User>()
+                .AddEntityFrameworkStores<BookSysContext>();
+
+            // Overrides custome Identity password rules
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 5;
+            }
+          );
+
             // add Services in BookSys.BLL
             services.AddScoped<BookService>();
             services.AddScoped<GenreService>();
+            services.AddScoped<UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +68,8 @@ namespace BookSys
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseAuthentication();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

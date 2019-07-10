@@ -10,8 +10,9 @@ namespace BookSys.ViewModel.ViewModels
         public string Message { get; set; }
         public string Identifier { get; set; }
         public Exception ExceptionError { get; set; }
+        public IEnumerable<object> Errors { get; set; }
 
-        public ResponseVM(string action, bool isSuccess, string entity, string msg = "", string identifier = "", Exception exception = null)
+        public ResponseVM(string action, bool isSuccess, string entity, string msg = "", string identifier = "", Exception exception = null, IEnumerable<object> error = null)
         {
             IsSuccess = isSuccess;
             if (isSuccess)
@@ -25,6 +26,10 @@ namespace BookSys.ViewModel.ViewModels
                 ExceptionError = exception;
                 if (identifier != null)
                     Identifier = identifier;
+                if (error != null)
+                {
+                    Errors = error;
+                }
             }
         }
 
