@@ -63,6 +63,11 @@
           "assetTargetFallback": true,
           "warn": true
         }
+      },
+      "runtimes": {
+        "win-x86": {
+          "#import": []
+        }
       }
     },
     "D:\\PROJECTS\\BookSys\\BookSys.DAL\\BookSys.DAL.csproj": {
@@ -139,6 +144,11 @@
           "assetTargetFallback": true,
           "warn": true
         }
+      },
+      "runtimes": {
+        "win-x86": {
+          "#import": []
+        }
       }
     },
     "D:\\PROJECTS\\BookSys\\BookSys.ViewModel\\BookSys.ViewModel.csproj": {
@@ -192,6 +202,11 @@
           ],
           "assetTargetFallback": true,
           "warn": true
+        }
+      },
+      "runtimes": {
+        "win-x86": {
+          "#import": []
         }
       }
     }

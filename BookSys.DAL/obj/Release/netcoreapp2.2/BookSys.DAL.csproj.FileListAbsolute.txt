@@ -1,0 +1,11 @@
+D:\PROJECTS\BookSys\BookSys.DAL\bin\Release\netcoreapp2.2\BookSys.DAL.deps.json
+D:\PROJECTS\BookSys\BookSys.DAL\bin\Release\netcoreapp2.2\BookSys.DAL.runtimeconfig.json
+D:\PROJECTS\BookSys\BookSys.DAL\bin\Release\netcoreapp2.2\BookSys.DAL.runtimeconfig.dev.json
+D:\PROJECTS\BookSys\BookSys.DAL\bin\Release\netcoreapp2.2\BookSys.DAL.dll
+D:\PROJECTS\BookSys\BookSys.DAL\bin\Release\netcoreapp2.2\BookSys.DAL.pdb
+D:\PROJECTS\BookSys\BookSys.DAL\obj\Release\netcoreapp2.2\BookSys.DAL.csprojAssemblyReference.cache
+D:\PROJECTS\BookSys\BookSys.DAL\obj\Release\netcoreapp2.2\BookSys.DAL.csproj.CoreCompileInputs.cache
+D:\PROJECTS\BookSys\BookSys.DAL\obj\Release\netcoreapp2.2\BookSys.DAL.AssemblyInfoInputs.cache
+D:\PROJECTS\BookSys\BookSys.DAL\obj\Release\netcoreapp2.2\BookSys.DAL.AssemblyInfo.cs
+D:\PROJECTS\BookSys\BookSys.DAL\obj\Release\netcoreapp2.2\BookSys.DAL.dll
+D:\PROJECTS\BookSys\BookSys.DAL\obj\Release\netcoreapp2.2\BookSys.DAL.pdb
