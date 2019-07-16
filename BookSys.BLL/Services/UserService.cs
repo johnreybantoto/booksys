@@ -3,26 +3,34 @@ using BookSys.BLL.Helpers;
 using BookSys.DAL.Models;
 using BookSys.ViewModel.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace BookSys.BLL.Services
 {
-    public class UserService : IUserService<UserVM, string>
+    public class UserService : IUserService<UserVM, LoginVM, string>
     {
-        private ToViewModel toViewModel = new ToViewModel();
-        private ToModel toModel = new ToModel();
-        private UserManager<User> _userManager;
-        private SignInManager<User> _signInManager;
+        private readonly ToViewModel toViewModel;
+        private readonly ToModel toModel;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
+        private readonly ApplicationSettingsVM _applicationSettings;
 
         // inject dependencies
-        public UserService(UserManager<User> userManager, SignInManager<User> signInManager)
+        public UserService(UserManager<User> userManager, SignInManager<User> signInManager, IOptions<ApplicationSettingsVM> appSettings)
         {
+            toViewModel = new ToViewModel();
+            toModel = new ToModel();
             _userManager = userManager;
             _signInManager = signInManager;
+            _applicationSettings = appSettings.Value;
         }
 
         public async Task<ResponseVM> Register(UserVM userVM)
@@ -36,7 +44,10 @@ namespace BookSys.BLL.Services
             };
             try
             {
+                // save user and encrypts password
                 var result = await _userManager.CreateAsync(user, userVM.Password);
+                // save user role
+                await _userManager.AddToRoleAsync(user, userVM.Role);
                 if(result.Succeeded)
                     return new ResponseVM("created", true, "User");
                 else
@@ -69,9 +80,28 @@ namespace BookSys.BLL.Services
             return null;
         }
 
-        public ResponseVM Login(UserVM userVM)
+        public async Task<ResponseVM> Login(LoginVM loginVM)
         {
-            return null;
+            var user = await _userManager.FindByNameAsync(loginVM.UserName);
+            var userFound = await _userManager.CheckPasswordAsync(user, loginVM.Password);
+            if (user != null && userFound)
+            {
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(new Claim[]
+                    {
+                        new Claim("UserID",user.Id.ToString()),
+                    }),
+                    Expires = DateTime.UtcNow.AddDays(1),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_applicationSettings.JWT_Secret)), SecurityAlgorithms.HmacSha256Signature)
+                };
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var securityToken = tokenHandler.CreateToken(tokenDescriptor);
+                var token = tokenHandler.WriteToken(securityToken);
+                return new ResponseVM("authenticated", true, "User", "Login succcess!", token);
+            }
+            else
+                return new ResponseVM("authenticated", false, "User", "Username or password is incorrect.");
         }
 
         public ResponseVM Deactivate(UserVM userVM)
@@ -82,6 +112,13 @@ namespace BookSys.BLL.Services
         public ResponseVM Validate(UserVM userVM)
         {
             return null;
+        }
+
+        public async Task<UserVM> UserProfile(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            var userVm = toViewModel.User(user);
+            return userVm;
         }
     }
 }

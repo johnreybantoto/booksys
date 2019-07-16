@@ -30,5 +30,16 @@ namespace BookSys.BLL.Helpers
                 Name = genre.Name
             };
         }
+
+        public UserVM User(User user)
+        {
+            return new UserVM
+            {
+                FirstName = user.FirstName,
+                MiddleName = user.MiddleName,
+                LastName = user.LastName,
+                UserName = user.UserName
+            };
+        }
     }
 }

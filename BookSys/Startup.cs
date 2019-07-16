@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using BookSys.ViewModel.ViewModels;
 
 namespace BookSys
 {
@@ -28,6 +29,8 @@ namespace BookSys
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<ApplicationSettingsVM>(Configuration.GetSection("ApplicationSettings"));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // In production, the Angular files will be served from this directory
@@ -40,6 +43,7 @@ namespace BookSys
                 options.UseSqlServer(Configuration.GetConnectionString("BookSysContext")));
 
             services.AddDefaultIdentity<User>()
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<BookSysContext>();
 
             // Overrides custom Identity password rules
@@ -119,7 +123,7 @@ namespace BookSys
                     //spa.UseAngularCliServer(npmScript: "start");
 
                     // separate compiling
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+                    spa.UseProxyToSpaDevelopmentServer(Configuration["ApplicationSettings:Client_URL"].ToString());
                 }
             });
         }
