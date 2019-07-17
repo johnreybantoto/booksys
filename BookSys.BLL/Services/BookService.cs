@@ -12,8 +12,8 @@ namespace BookSys.BLL.Services
 {
     public class BookService : IGenericService<BookVM, long>
     {
-        private ToViewModel toViewModel = new ToViewModel();
-        private ToModel toModel = new ToModel();
+        private readonly ToViewModel toViewModel = new ToViewModel();
+        private readonly ToModel toModel = new ToModel();
         private readonly BookSysContext context;
 
         // inject dependencies
@@ -161,6 +161,50 @@ namespace BookSys.BLL.Services
                 }
             }
         }
-       
+
+        public PagingResponse<BookVM> GetDataServerSide(PagingRequest paging)
+        {
+            using (context)
+            {
+
+                var pagingResponse = new PagingResponse<BookVM>()
+                {
+                    Draw = paging.Draw
+                };
+
+                IEnumerable<Book> query = null;
+
+                if (!string.IsNullOrEmpty(paging.Search.Value))
+                {
+                    query = context.Books.Where(v => v.Title.Contains(paging.Search.Value) || v.Copyright.ToString().Contains(paging.Search.Value));
+                }
+                else
+                {
+                    query = context.Books;
+                }
+
+                var recordsTotal = query.Count();
+
+                var colOrder = paging.Order[0];
+
+                switch (colOrder.Column)
+                {
+                    case 0:
+                        query = colOrder.Dir == "asc" ? query.OrderBy(v => v.Title) : query.OrderByDescending(v => v.Title);
+                        break;
+                    case 1:
+                        query = colOrder.Dir == "asc" ? query.OrderBy(b => b.Copyright) : query.OrderByDescending(b => b.Copyright);
+                        break;
+                }
+
+                var taken = query.Skip(paging.Start).Take(paging.Length).ToArray();
+                pagingResponse.Reponse = taken.Select(x => toViewModel.Book(x));
+                pagingResponse.RecordsTotal = recordsTotal;
+                pagingResponse.RecordsFiltered = recordsTotal;
+
+                return pagingResponse;
+            }
+        }
+
     }
 }

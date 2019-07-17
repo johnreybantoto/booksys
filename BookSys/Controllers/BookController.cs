@@ -67,5 +67,12 @@ namespace BookSys.Controllers
             }
             return bookService.Update(bookVM);
         }
+
+
+        [HttpPost("GetDataServerSide")]
+        public ActionResult<PagingResponse<BookVM>> GetDataServerSide([FromBody]PagingRequest paging)
+        {
+            return bookService.GetDataServerSide(paging);
+        }
     }
 }

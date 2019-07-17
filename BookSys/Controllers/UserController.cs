@@ -13,6 +13,7 @@ namespace BookSys.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IUserService<UserVM, LoginVM, string> userService;
@@ -23,6 +24,7 @@ namespace BookSys.Controllers
         }
 
         [HttpPost("[action]")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<ResponseVM>> Register([FromBody] UserVM userVM)
         {
             if (ModelState.IsValid)
@@ -34,7 +36,9 @@ namespace BookSys.Controllers
                 return BadRequest("Something went wrong");
         }
 
+
         [HttpPost("[action]")]
+        [AllowAnonymous]
         public async Task<ActionResult<ResponseVM>> Login([FromBody] LoginVM loginVM)
         {
             if (ModelState.IsValid)
@@ -50,11 +54,32 @@ namespace BookSys.Controllers
         }
 
         [HttpGet("[action]")]
-        [Authorize]
         public async Task<UserVM> UserProfile()
         {
             string userId = User.Claims.First(c => c.Type == "UserID").Value;
             return await userService.UserProfile(userId);
+        }
+
+        [HttpGet("[action]")]
+        [Authorize(Roles ="Admin")]
+        public string ForAdmin()
+        {
+            return "For Admin";
+        }
+
+        [HttpGet("[action]")]
+        [Authorize(Roles = "Clerk")]
+        public string ForClerk()
+        {
+            return "For Clerk";
+        }
+
+
+        [HttpGet("[action]")]
+        [Authorize(Roles = "Admin,Clerk")]
+        public string ForAdminOrClerk()
+        {
+            return "For Admin or Clerk";
         }
     }
 }

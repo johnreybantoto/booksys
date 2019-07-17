@@ -17,8 +17,8 @@ namespace BookSys.BLL.Services
 {
     public class UserService : IUserService<UserVM, LoginVM, string>
     {
-        private readonly ToViewModel toViewModel;
-        private readonly ToModel toModel;
+        private ToViewModel toViewModel;
+        private ToModel toModel;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly ApplicationSettingsVM _applicationSettings;
@@ -86,11 +86,16 @@ namespace BookSys.BLL.Services
             var userFound = await _userManager.CheckPasswordAsync(user, loginVM.Password);
             if (user != null && userFound)
             {
+                //Get role assigned to the user
+                var role = await _userManager.GetRolesAsync(user);
+                IdentityOptions _options = new IdentityOptions();
+
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                     {
                         new Claim("UserID",user.Id.ToString()),
+                        new Claim(_options.ClaimsIdentity.RoleClaimType,role.FirstOrDefault())
                     }),
                     Expires = DateTime.UtcNow.AddDays(1),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_applicationSettings.JWT_Secret)), SecurityAlgorithms.HmacSha256Signature)

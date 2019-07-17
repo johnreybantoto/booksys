@@ -12,5 +12,6 @@ namespace BookSys.BLL.Contracts
         ResponseVM Create(TVM entity);
         ResponseVM Delete(TType guid);
         ResponseVM Update(TVM entity);
+        PagingResponse<TVM> GetDataServerSide(PagingRequest paging);
     }
 }
