@@ -8,4 +8,3 @@ D:\PROJECTS\BookSys\BookSys.DAL\obj\Debug\netcoreapp2.2\BookSys.DAL.dll
 D:\PROJECTS\BookSys\BookSys.DAL\obj\Debug\netcoreapp2.2\BookSys.DAL.pdb
 D:\PROJECTS\BookSys\BookSys.DAL\bin\Debug\netcoreapp2.2\BookSys.DAL.runtimeconfig.json
 D:\PROJECTS\BookSys\BookSys.DAL\bin\Debug\netcoreapp2.2\BookSys.DAL.runtimeconfig.dev.json
-D:\PROJECTS\BookSys\BookSys.DAL\obj\Debug\netcoreapp2.2\BookSys.DAL.csprojAssemblyReference.cache

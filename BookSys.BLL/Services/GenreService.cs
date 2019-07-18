@@ -152,6 +152,47 @@ namespace BookSys.BLL.Services
                 }
             }
         }
-       
+
+        public PagingResponse<GenreVM> GetDataServerSide(PagingRequest paging)
+        {
+            using (context)
+            {
+
+                var pagingResponse = new PagingResponse<GenreVM>()
+                {
+                    Draw = paging.Draw
+                };
+
+                IEnumerable<Genre> query = null;
+
+                if (!string.IsNullOrEmpty(paging.Search.Value))
+                {
+                    query = context.Genres.Where(v => v.Name.Contains(paging.Search.Value));
+                }
+                else
+                {
+                    query = context.Genres;
+                }
+
+                var recordsTotal = query.Count();
+
+                var colOrder = paging.Order[0];
+
+                switch (colOrder.Column)
+                {
+                    case 0:
+                        query = colOrder.Dir == "asc" ? query.OrderBy(v => v.Name) : query.OrderByDescending(v => v.Name);
+                        break;
+                }
+
+                var taken = query.Skip(paging.Start).Take(paging.Length).ToArray();
+                pagingResponse.Reponse = taken.Select(x => toViewModel.Genre(x));
+                pagingResponse.RecordsTotal = recordsTotal;
+                pagingResponse.RecordsFiltered = recordsTotal;
+
+                return pagingResponse;
+            }
+        }
+
     }
 }

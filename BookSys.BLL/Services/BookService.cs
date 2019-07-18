@@ -176,11 +176,15 @@ namespace BookSys.BLL.Services
 
                 if (!string.IsNullOrEmpty(paging.Search.Value))
                 {
-                    query = context.Books.Where(v => v.Title.Contains(paging.Search.Value) || v.Copyright.ToString().Contains(paging.Search.Value));
+                    // search based from the 
+                    query = context.Books.Include(x => x.Genre)
+                                         .Where(v => v.Title.ToString().ToLower().Contains(paging.Search.Value.ToLower()) || 
+                                                     v.Copyright.ToString().ToLower().Contains(paging.Search.Value.ToLower()) || 
+                                                     v.Genre.Name.ToString().ToLower().Contains(paging.Search.Value.ToLower()));
                 }
                 else
                 {
-                    query = context.Books;
+                    query = context.Books.Include(x => x.Genre);
                 }
 
                 var recordsTotal = query.Count();
@@ -194,6 +198,9 @@ namespace BookSys.BLL.Services
                         break;
                     case 1:
                         query = colOrder.Dir == "asc" ? query.OrderBy(b => b.Copyright) : query.OrderByDescending(b => b.Copyright);
+                        break;
+                    case 2:
+                        query = colOrder.Dir == "asc" ? query.OrderBy(b => b.Genre.Name) : query.OrderByDescending(b => b.Genre.Name);
                         break;
                 }
 
