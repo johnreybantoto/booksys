@@ -67,5 +67,12 @@ namespace GenreSys.Controllers
             }
             return genreService.Update(genreVM);
         }
+
+
+        [HttpPost("[action]")]
+        public ActionResult<PagingResponse<GenreVM>> GetDataServerSide([FromBody]PagingRequest paging)
+        {
+            return genreService.GetDataServerSide(paging);
+        }
     }
 }

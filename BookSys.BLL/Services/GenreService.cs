@@ -160,24 +160,27 @@ namespace BookSys.BLL.Services
 
                 var pagingResponse = new PagingResponse<GenreVM>()
                 {
+                    // counts how many times the user draws data
                     Draw = paging.Draw
                 };
-
+                // initialized query
                 IEnumerable<Genre> query = null;
-
+                // search if user provided a search value, i.e. search value is not empty
                 if (!string.IsNullOrEmpty(paging.Search.Value))
                 {
-                    query = context.Genres.Where(v => v.Name.Contains(paging.Search.Value));
+                    // search based from the search value
+                    query = context.Genres.Where(v => v.Name.ToString().ToLower().Contains(paging.Search.Value.ToString().ToLower()));
                 }
                 else
                 {
+                    // selects all from table
                     query = context.Genres;
                 }
-
+                // total records from query
                 var recordsTotal = query.Count();
-
+                // orders the data by the sorting selected by the user
+                // used ternary operator to determine if ascending or descending
                 var colOrder = paging.Order[0];
-
                 switch (colOrder.Column)
                 {
                     case 0:
@@ -186,6 +189,7 @@ namespace BookSys.BLL.Services
                 }
 
                 var taken = query.Skip(paging.Start).Take(paging.Length).ToArray();
+                // converts model(query) into viewmodel then assigns it to response which is displayed as "data"
                 pagingResponse.Reponse = taken.Select(x => toViewModel.Genre(x));
                 pagingResponse.RecordsTotal = recordsTotal;
                 pagingResponse.RecordsFiltered = recordsTotal;

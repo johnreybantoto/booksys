@@ -27,5 +27,11 @@ namespace BookSys.ViewModel.ViewModels
 
         [Required]
         public string Role { get; set; }
+
+        [Required]
+        public string Question { get; set; }
+
+        [Required]
+        public string Answer { get; set; }
     }
 }

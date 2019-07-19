@@ -12,5 +12,9 @@ namespace BookSys.DAL.Models
         public string MiddleName { get; set; }
 
         public string LastName { get; set; }
+
+        public string Question { get; set; }
+
+        public string Answer { get; set; }
     }
 }

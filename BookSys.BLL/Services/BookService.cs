@@ -166,17 +166,17 @@ namespace BookSys.BLL.Services
         {
             using (context)
             {
-
                 var pagingResponse = new PagingResponse<BookVM>()
                 {
+                    // counts how many times the user draws data
                     Draw = paging.Draw
                 };
-
+                // initialized query
                 IEnumerable<Book> query = null;
-
+                // search if user provided a search value, i.e. search value is not empty
                 if (!string.IsNullOrEmpty(paging.Search.Value))
                 {
-                    // search based from the 
+                    // search based from the search value
                     query = context.Books.Include(x => x.Genre)
                                          .Where(v => v.Title.ToString().ToLower().Contains(paging.Search.Value.ToLower()) || 
                                                      v.Copyright.ToString().ToLower().Contains(paging.Search.Value.ToLower()) || 
@@ -184,13 +184,14 @@ namespace BookSys.BLL.Services
                 }
                 else
                 {
+                    // selects all from table
                     query = context.Books.Include(x => x.Genre);
                 }
-
+                // total records from query
                 var recordsTotal = query.Count();
-
+                // orders the data by the sorting selected by the user
+                // used ternary operator to determine if ascending or descending
                 var colOrder = paging.Order[0];
-
                 switch (colOrder.Column)
                 {
                     case 0:
@@ -203,8 +204,8 @@ namespace BookSys.BLL.Services
                         query = colOrder.Dir == "asc" ? query.OrderBy(b => b.Genre.Name) : query.OrderByDescending(b => b.Genre.Name);
                         break;
                 }
-
                 var taken = query.Skip(paging.Start).Take(paging.Length).ToArray();
+                // converts model(query) into viewmodel then assigns it to response which is displayed as "data"
                 pagingResponse.Reponse = taken.Select(x => toViewModel.Book(x));
                 pagingResponse.RecordsTotal = recordsTotal;
                 pagingResponse.RecordsFiltered = recordsTotal;

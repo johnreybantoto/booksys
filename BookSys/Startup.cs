@@ -76,11 +76,12 @@ namespace BookSys
                     ClockSkew = TimeSpan.Zero
                 };
             });
-
+            # region Services added to scope
             // add Services in BookSys.BLL
             services.AddScoped<BookService>();
             services.AddScoped<GenreService>();
             services.AddScoped<UserService>();
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -41,6 +42,8 @@ namespace BookSys.BLL.Services
                 FirstName = userVM.FirstName,
                 MiddleName = userVM.MiddleName,
                 LastName = userVM.LastName,
+                Question = "Fav color",
+                Answer = ComputeSha256Hash("red")
             };
             try
             {
@@ -121,9 +124,78 @@ namespace BookSys.BLL.Services
 
         public async Task<UserVM> UserProfile(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
-            var userVm = toViewModel.User(user);
-            return userVm;
+            using (_userManager)
+            {
+                var user = await _userManager.FindByIdAsync(id);
+                UserVM userVm = null;
+                if (user != null)
+                {
+                    userVm = toViewModel.User(user);
+
+                }
+                return userVm;
+            }
         }
+
+        public async Task<ForgotPasswordVM> GetSecurityQuestion(string username)
+        {
+            using (_userManager)
+            {
+                var user = await _userManager.FindByNameAsync(username);
+                ForgotPasswordVM forgotPasswordVM = null;
+                if (user != null)
+                {
+                    forgotPasswordVM = new ForgotPasswordVM
+                                            {
+                                                UserName = user.UserName,
+                                                Question = user.Question
+                                            };
+                }
+                return forgotPasswordVM;
+            }
+        }
+
+        public async Task<ResponseVM> ResetPassword(ForgotPasswordVM forgotPasswordVM)
+        {
+            using (_userManager)
+            {
+                var user = await _userManager.FindByNameAsync(forgotPasswordVM.UserName);
+
+                if(user == null)
+                    return new ResponseVM("reset password", false, "User", "User not found.");
+
+                // hashes the answer and compares to the saved in database
+                var answerHash = ComputeSha256Hash(forgotPasswordVM.Answer);
+                if(answerHash == user.Answer)
+                {
+                    await _userManager.RemovePasswordAsync(user);
+                    await _userManager.AddPasswordAsync(user, forgotPasswordVM.NewPassword);
+                    return new ResponseVM("reset password", true, "User", "You can now login with your new password.");
+                }
+                else
+                {
+                    return new ResponseVM("reset password", false, "User", "Wrong answer!");
+                }
+            }
+        }
+
+        static string ComputeSha256Hash(string rawData)
+        {
+            // Create a SHA256
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                // ComputeHash - returns byte array
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
+
+                // Convert byte array to a string
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x2"));
+                }
+                return builder.ToString();
+            }
+        }
+
     }
 }
