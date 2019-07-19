@@ -1,0 +1,56 @@
+<div class="panel">
+    <div class="panel-heading">
+        <h1 style="display: inline;">Update book</h1>
+        <button class="btn btn-danger btn-sm float-right" (click)="close()"><i class="material-icons">close</i></button>
+    </div>
+    <div class="panel-body">
+        <div class="jumbotron">
+            <form (ngSubmit)="onFormSubmit()" method="post" [formGroup]="bookEditForm">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="title">Title: <span style="color: red">*</span></label> <br />
+                        <input type="text" class="form-control" id="title" formControlName="title" [ngClass]="{ 'is-invalid': (f.title.touched && f.title.errors) || titleBackEndErrors }"/>
+                        <div *ngIf="f.title.touched && f.title.errors" class="invalid-feedback">
+                            <div *ngIf="f.title.errors.required"><span style="color: red; font-size: 10pt">This field is required</span></div>
+                        </div>
+                        <div>
+                            <span *ngFor="let error of titleBackEndErrors" style="color: red; font-size: 10pt;">{{error}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="copyright">Copyright: <span style="color: red">*</span></label> <br />
+                        <input type="number" class="form-control" id="copyright" formControlName="copyright" [ngClass]="{ 'is-invalid': (f.copyright.touched && f.copyright.errors) || copyrightBackEndErrors }"/>
+                        <div *ngIf="f.copyright.touched && f.copyright.errors" class="invalid-feedback">
+                            <div *ngIf="f.copyright.errors.required"><span style="color: red; font-size: 10pt">This field is required</span></div>
+                        </div>
+                        <div>
+                            <span *ngFor="let error of copyrightBackEndErrors" style="color: red; font-size: 10pt;">{{error}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                            <label for="genreID">Genre: <span style="color: red">*</span></label> <br />
+                            <input type="text" id="genreID" formControlName="genreID" hidden/>
+                            <div>
+                                <input type="text" class="form-control" formControlName="genreSelect" (keyup)="selectGenre($event)" (click)="$event.target.select()" list="genresListss">
+                                <datalist class="ui-datalist-data" height="100px" id="genresListss" >
+                                    <option [ngValue]="null" disabled="true" [selected]="true">Choose a genre
+                                    <option id="{{genre.id}}" *ngFor="let genre of genresList" [value]="genre.name">
+                                </datalist>
+                                <div *ngIf="f.genreSelect.touched && f.genreSelect.errors" class="invalid-feedback">
+                                    <div *ngIf="f.genreSelect.errors.required"><span style="color: red; font-size: 10pt">This field is required</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <br>
+                            <button type="button" class="btn btn-info btn-trans" (click)="openGenreDialog()" data-toggle="tooltip" data-placement="bottom" title="Add new genre"><i class="material-icons">add</i></button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <br>
+                        <button type="submit" class="btn btn-primary" style="margin-top: 5px;" [disabled]="!bookEditForm.valid || isSubmit">Update</button>
+                    </div>
+            </form>   
+        </div>
+    </div>
+</div>

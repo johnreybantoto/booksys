@@ -1,0 +1,54 @@
+
+<div class="panel">
+    <div class="panel-heading">
+        What is your name?
+    </div>
+    <div class="panel-body">
+        <h1 class="jumbotron" *ngIf="myName">{{myName}}</h1>
+        <div class="jumbotron">
+            <label for="yourName">Name:</label>
+            <input type="text" (keyup.enter)="submitYourName()" [(ngModel)]="yourName" id="yourName" class="form-control" placeholder="Enter your name">
+            <div>
+                <h1 *ngIf="yourNameResponse">{{yourNameResponse}}</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-heading">
+        <h1>Name and Age checker</h1>
+    </div>
+    <div class="panel-body">
+        <div class="jumbotron">
+            <form (ngSubmit)="onFormSubmit()" method="post" [formGroup]="sampleCreateForm">
+                <div class="row">
+                    <div class="col-md-5">
+                        <label for="name">Name: <span style="color: red">*</span></label> <br />
+                        <input type="text" class="form-control" id="name" formControlName="name" [ngClass]="{ 'is-invalid': (f.name.touched && f.name.errors) || nameBackEndErrors }"/>
+                        <div *ngIf="f.name.touched && f.name.errors" class="invalid-feedback">
+                            <div *ngIf="f.name.errors.required"><span style="color: red; font-size: 10pt">This field is required</span></div>
+                        </div>
+                        <div>
+                            <span *ngFor="let error of nameBackEndErrors" style="color: red; font-size: 10pt;">{{error}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="age">Age: <span style="color: red">*</span></label> <br />
+                        <input type="number" class="form-control" id="age" formControlName="age" [ngClass]="{ 'is-invalid': (f.age.touched && f.age.errors) || ageBackEndErrors }"/>
+                        <div *ngIf="f.age.touched && f.age.errors" class="invalid-feedback">
+                            <div *ngIf="f.age.errors.required"><span style="color: red; font-size: 10pt">This field is required</span></div>
+                        </div>
+                        <div>
+                            <span *ngFor="let error of ageBackEndErrors" style="color: red; font-size: 10pt;">{{error}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 ">
+                        <button type="submit" class="btn btn-primary" style="margin-top: 5px;" [disabled]="!sampleCreateForm.valid || isSubmit"><i class="fa fa-plus"></i>Check now</button>
+                    </div>
+                </div>
+            </form>   
+        </div>
+        
+    </div>
+</div>

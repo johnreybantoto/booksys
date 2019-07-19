@@ -1,0 +1,9 @@
+<div *ngIf="isLogin">
+  <h1>Hello {{userName}}</h1>
+  <h2>This is a single page application build with ASP.Net Core 2.2 and Angular 8</h2>
+  <h1>Book System for book profiling with validation</h1>
+</div>
+
+<div *ngIf="!isLogin">
+  <app-login></app-login>
+</div>

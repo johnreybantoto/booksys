@@ -1,0 +1,82 @@
+<div class="panel">
+    <div class="panel-heading">
+        <h1>Register new user</h1>
+    </div>
+    <div class="panel-body">
+        <div class="jumbotron">
+            <form (ngSubmit)="submit()" method="post" [formGroup]="registerForm">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="userName">Username: <span style="color: red">*</span></label> <br />
+                        <input type="text" class="form-control" id="userName" formControlName="userName" [ngClass]="{ 'is-invalid': (f.userName.touched && f.userName.errors) || userNameBackEndErrors }"/>
+                        <div *ngIf="f.userName.touched && f.userName.errors" class="invalid-feedback">
+                            <div *ngIf="f.userName.errors.required"><span style="color: red; font-size: 10pt">This field is required</span></div>
+                        </div>
+                        <div>
+                            <span *ngFor="let error of userNameBackEndErrors" style="color: red; font-size: 10pt;">{{error}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="password">Password: <span style="color: red">*</span></label> <br />
+                        <input type="password" class="form-control" id="password" formControlName="password" [ngClass]="{ 'is-invalid': (f.password.touched && f.password.errors) || passwordBackEndErrors }"/>
+                        <div *ngIf="f.password.touched && f.password.errors" class="invalid-feedback">
+                            <div *ngIf="f.password.errors.required"><span style="color: red; font-size: 10pt">This field is required</span></div>
+                        </div>
+                        <div>
+                            <span *ngFor="let error of passwordBackEndErrors" style="color: red; font-size: 10pt;">{{error}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="role">Role: <span style="color: red">*</span></label> <br />
+                        <select type="text" class="form-control" id="role" formControlName="role" [ngClass]="{ 'is-invalid': (f.role.touched && f.role.errors) || roleBackEndErrors }">
+                            <option value="" selected disabled>Select role</option>
+                            <option value="Admin">Admin</option>
+                            <option value="Clerk">Clerk</option>
+                        </select>
+                        <div *ngIf="f.role.touched && f.role.errors" class="invalid-feedback">
+                            <div *ngIf="f.role.errors.required"><span style="color: red; font-size: 10pt">This field is required</span></div>
+                        </div>
+                        <div>
+                            <span *ngFor="let error of roleBackEndErrors" style="color: red; font-size: 10pt;">{{error}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="firstName">First name: <span style="color: red">*</span></label> <br />
+                        <input type="text" class="form-control" id="firstName" formControlName="firstName" [ngClass]="{ 'is-invalid': (f.firstName.touched && f.firstName.errors) || firstNameBackEndErrors }"/>
+                        <div *ngIf="f.firstName.touched && f.firstName.errors" class="invalid-feedback">
+                            <div *ngIf="f.firstName.errors.required"><span style="color: red; font-size: 10pt">This field is required</span></div>
+                        </div>
+                        <div>
+                            <span *ngFor="let error of firstNameBackEndErrors" style="color: red; font-size: 10pt;">{{error}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="middleName">Middle name: <span style="color: red">*</span></label> <br />
+                        <input type="text" class="form-control" id="middleName" formControlName="middleName" [ngClass]="{ 'is-invalid': (f.middleName.touched && f.middleName.errors) || middleNameBackEndErrors }"/>
+                        <div *ngIf="f.middleName.touched && f.middleName.errors" class="invalid-feedback">
+                            <div *ngIf="f.middleName.errors.required"><span style="color: red; font-size: 10pt">This field is required</span></div>
+                        </div>
+                        <div>
+                            <span *ngFor="let error of middleNameBackEndErrors" style="color: red; font-size: 10pt;">{{error}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="lastName">Last name: <span style="color: red">*</span></label> <br />
+                        <input type="text" class="form-control" id="lastName" formControlName="lastName" [ngClass]="{ 'is-invalid': (f.lastName.touched && f.lastName.errors) || lastNameBackEndErrors }"/>
+                        <div *ngIf="f.lastName.touched && f.lastName.errors" class="invalid-feedback">
+                            <div *ngIf="f.lastName.errors.required"><span style="color: red; font-size: 10pt">This field is required</span></div>
+                        </div>
+                        <div>
+                            <span *ngFor="let error of lastNameBackEndErrors" style="color: red; font-size: 10pt;">{{error}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="col-md-3 btn btn-primary align-center" style="margin-top: 5px;" [disabled]="!registerForm.valid || isSubmit">Register</button>
+                </div>
+            </form>   
+        </div>
+    </div>
+</div>

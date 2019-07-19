@@ -1,0 +1,28 @@
+<div class="panel">
+        <div class="panel-heading">
+            <h1 style="display: inline;">Update genre</h1>
+            <button class="btn btn-danger btn-sm float-right" (click)="close()"><i class="material-icons">close</i></button>
+        </div>
+        <div class="panel-body">
+            <div class="jumbotron">
+                <form (ngSubmit)="onFormSubmit()" method="post" [formGroup]="genreEditForm">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <label for="name">Name: <span style="color: red">*</span></label> <br />
+                            <input type="text" class="form-control" id="name" formControlName="name" [ngClass]="{ 'is-invalid': (f.name.touched && f.name.errors) || nameBackEndErrors }"/>
+                            <div *ngIf="f.name.touched && f.name.errors" class="invalid-feedback">
+                                <div *ngIf="f.name.errors.required"><span style="color: red; font-size: 10pt">This field is required</span></div>
+                            </div>
+                            <div>
+                                <span *ngFor="let error of nameBackEndErrors" style="color: red; font-size: 10pt;">{{error}}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 ">
+                            <br>
+                            <button type="submit" class="btn btn-primary" style="margin-top: 5px;" [disabled]="!genreEditForm.valid || isSubmit">Update</button>
+                        </div>
+                    </div>
+                </form>   
+            </div>
+        </div>
+    </div>
