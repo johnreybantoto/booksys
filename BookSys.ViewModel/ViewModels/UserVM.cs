@@ -10,6 +10,7 @@ namespace BookSys.ViewModel.ViewModels
         public string ID { get; set; }
 
         [Required]
+        [StringLength(25, ErrorMessage = "Must be between 5 and 25 characters", MinimumLength = 5)]
         public string UserName { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
@@ -18,20 +19,24 @@ namespace BookSys.ViewModel.ViewModels
         public string Password { get; set; }
 
         [Required]
+        [StringLength(25, ErrorMessage = "Must be between 2 and 25 characters", MinimumLength = 2)]
         public string FirstName { get; set; }
 
         public string MiddleName { get; set; }
 
         [Required]
+        [StringLength(25, ErrorMessage = "Must be between 2 and 25 characters", MinimumLength = 2)]
         public string LastName { get; set; }
 
         [Required]
         public string Role { get; set; }
 
         [Required]
+        [StringLength(25, ErrorMessage = "Must be between 5 and 25 characters", MinimumLength = 5)]
         public string Question { get; set; }
 
         [Required]
+        [StringLength(25, ErrorMessage = "Must be between 5 and 25 characters", MinimumLength = 5)]
         public string Answer { get; set; }
     }
 }

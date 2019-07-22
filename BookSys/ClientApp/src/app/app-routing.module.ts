@@ -8,6 +8,7 @@ import { BookComponent } from './views/book/book.component';
 import { RegisterComponent } from './views/auth/register/register.component';
 import { AuthGuard } from './guard/auth.guard';
 import { ForbiddenComponent } from './views/auth/forbidden/forbidden.component';
+import { ForgotPasswordComponent } from './views/auth/forgot-password/forgot-password.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'book', component: BookComponent, canActivate:[AuthGuard] },
   { path: 'register', component: RegisterComponent, canActivate: [AuthGuard], data: {permittedRoles: ['Admin'] } },
   { path: 'forbidden', component: ForbiddenComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
 ]
 
 @NgModule({

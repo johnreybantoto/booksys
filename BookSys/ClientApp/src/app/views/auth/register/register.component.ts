@@ -15,6 +15,8 @@ export class RegisterComponent implements OnInit {
   firstNameBackEndErrors: string[];
   middleNameBackEndErrors: string[];
   lastNameBackEndErrors: string[];
+  questionBackEndErrors: string[];
+  answerBackEndErrors: string[];
 
   isSubmit = false;
 
@@ -27,7 +29,9 @@ export class RegisterComponent implements OnInit {
       firstName: new FormControl('', Validators.required),
       middleName: new FormControl(''),
       lastName: new FormControl('', Validators.required),
-      role: new FormControl('', Validators.required)
+      role: new FormControl('', Validators.required),
+      question: new FormControl('', Validators.required),
+      answer: new FormControl('', Validators.required)
     })
   }
 
@@ -81,16 +85,20 @@ export class RegisterComponent implements OnInit {
 
   displayBackEndErrors(errors){
     console.log(errors)
-    if('userName' in errors)
-      this.userNameBackEndErrors = errors.userName; // shows the data annotations error message
+    if('UserName' in errors)
+      this.userNameBackEndErrors = errors.UserName; // shows the data annotations error message
     if('Password' in errors) 
       this.passwordBackEndErrors = errors.Password; // shows the data annotations error message
-    if('firstName' in errors) 
-      this.firstNameBackEndErrors = errors.firstName; // shows the data annotations error message
-    if('middleName' in errors) 
-      this.middleNameBackEndErrors = errors.middleName; // shows the data annotations error message
-    if('middleName' in errors) 
-      this.middleNameBackEndErrors = errors.middleName; // shows the data annotations error message
+    if('FirstName' in errors) 
+      this.firstNameBackEndErrors = errors.FirstName; // shows the data annotations error message
+    if('MiddleName' in errors) 
+      this.middleNameBackEndErrors = errors.MiddleName; // shows the data annotations error message
+    if('LastName' in errors) 
+      this.lastNameBackEndErrors = errors.LastName; // shows the data annotations error message
+    if('Question' in errors) 
+      this.questionBackEndErrors = errors.Question; // shows the data annotations error message
+    if('Answer' in errors) 
+      this.answerBackEndErrors = errors.Answer; // shows the data annotations error message
   }
 
   resetBackEndErrors(){
@@ -99,5 +107,7 @@ export class RegisterComponent implements OnInit {
     this.firstNameBackEndErrors = null;
     this.middleNameBackEndErrors = null;
     this.lastNameBackEndErrors = null;
+    this.questionBackEndErrors = null;
+    this.answerBackEndErrors = null;
   }
 }

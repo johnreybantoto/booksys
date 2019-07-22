@@ -81,5 +81,37 @@ namespace BookSys.Controllers
         {
             return "For Admin or Clerk";
         }
+
+        [HttpGet("[action]/{userName}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<ForgotPasswordVM>> GetSecurityQuestion(string userName)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = await userService.GetSecurityQuestion(userName);
+                if (res != null)
+                    return Ok(res);
+                else
+                    return NotFound(res);
+            }
+            else
+                return BadRequest("Something went wrong");
+        }
+
+        [HttpPost("[action]")]
+        [AllowAnonymous]
+        public async Task<ActionResult<ResponseVM>> ResetPassword([FromBody]ForgotPasswordVM forgotPasswordVM)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = await userService.ResetPassword(forgotPasswordVM);
+                if (res.IsSuccess)
+                    return Ok(res);
+                else
+                    return BadRequest(res);
+            }
+            else
+                return BadRequest("Something went wrong");
+        }
     }
 }

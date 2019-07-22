@@ -42,15 +42,14 @@ namespace BookSys.BLL.Services
                 FirstName = userVM.FirstName,
                 MiddleName = userVM.MiddleName,
                 LastName = userVM.LastName,
-                Question = "Fav color",
-                Answer = ComputeSha256Hash("red")
+                Question =  userVM.Question,
+                Answer = ComputeSha256Hash(userVM.Answer)
             };
             try
             {
                 // save user and encrypts password
                 var result = await _userManager.CreateAsync(user, userVM.Password);
-                // save user role
-                await _userManager.AddToRoleAsync(user, userVM.Role);
+               
                 if(result.Succeeded)
                     return new ResponseVM("created", true, "User");
                 else

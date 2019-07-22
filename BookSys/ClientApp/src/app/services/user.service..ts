@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { MyResponse } from '../models/response.model';
 import { User } from '../models/user.model';
+import { ForgotPassword } from '../models/forgot-password.model';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,14 @@ export class UserService {
 
   userProfile() : Observable<User> {
     return this.http.get<User>(this.userApi + 'UserProfile');
+  }
+
+  getSecurityQuestion(userName: string) : Observable<ForgotPassword> {
+    return this.http.get<ForgotPassword>(this.userApi + 'GetSecurityQuestion/' + userName);
+  }
+
+  resetPassword(forgotPassword: ForgotPassword) : Observable<MyResponse>{
+    return this.http.post<MyResponse>(this.userApi + 'ResetPassword', forgotPassword);
   }
 
   // function to be called when user access a route

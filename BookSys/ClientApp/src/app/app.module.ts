@@ -25,6 +25,7 @@ import { DialogWrapperComponent } from './views/layouts/dialog-wrapper/dialog-wr
 import { LoginComponent } from './views/auth/login/login.component';
 import { ForbiddenComponent } from './views/auth/forbidden/forbidden.component';
 import { AuthInterceptor } from './guard/auth.interceptor';
+import { ForgotPasswordComponent } from './views/auth/forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { AuthInterceptor } from './guard/auth.interceptor';
     RegisterComponent,
     DialogWrapperComponent,
     LoginComponent,
-    ForbiddenComponent
+    ForbiddenComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

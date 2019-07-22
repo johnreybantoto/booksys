@@ -17,5 +17,7 @@ namespace BookSys.BLL.Contracts
         Task<ResponseVM> Login(LVM entity);
         ResponseVM Validate(TVM entity);
         Task<TVM> UserProfile(string id);
+        Task<ForgotPasswordVM> GetSecurityQuestion(string id);
+        Task<ResponseVM> ResetPassword(ForgotPasswordVM entity);
     }
 }
