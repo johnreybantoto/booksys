@@ -18,8 +18,7 @@ namespace BookSys.BLL.Services
 {
     public class UserService : IUserService<UserVM, LoginVM, string>
     {
-        private ToViewModel toViewModel;
-        private ToModel toModel;
+        private readonly ToViewModel toViewModel;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly ApplicationSettingsVM _applicationSettings;
@@ -28,7 +27,6 @@ namespace BookSys.BLL.Services
         public UserService(UserManager<User> userManager, SignInManager<User> signInManager, IOptions<ApplicationSettingsVM> appSettings)
         {
             toViewModel = new ToViewModel();
-            toModel = new ToModel();
             _userManager = userManager;
             _signInManager = signInManager;
             _applicationSettings = appSettings.Value;
@@ -49,8 +47,9 @@ namespace BookSys.BLL.Services
             {
                 // save user and encrypts password
                 var result = await _userManager.CreateAsync(user, userVM.Password);
-               
-                if(result.Succeeded)
+                await _userManager.AddToRoleAsync(user, userVM.Role);
+
+                if (result.Succeeded)
                     return new ResponseVM("created", true, "User");
                 else
                     return new ResponseVM("created", false, "User", "", "", null, result.Errors);

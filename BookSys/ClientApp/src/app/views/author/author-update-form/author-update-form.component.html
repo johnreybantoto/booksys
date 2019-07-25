@@ -1,0 +1,50 @@
+<div class="panel">
+        <div class="panel-heading">
+            <h1>Update author</h1>
+        </div>
+        <div class="panel-body">
+            <div class="jumbotron">
+                <form (ngSubmit)="onFormSubmit()" method="post" [formGroup]="authorUpdateForm">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="firstName">Firstname: <span style="color: red">*</span></label> <br />
+                            <input type="text" class="form-control" id="firstName" formControlName="firstName" [ngClass]="{ 'is-invalid': (f.firstName.touched && f.firstName.errors) || firstNameBackEndErrors }"/>
+                            <div *ngIf="f.firstName.touched && f.firstName.errors" class="invalid-feedback">
+                                <div *ngIf="f.firstName.errors.required"><span class="error-msg">This field is required</span></div>
+                            </div>
+                            <div>
+                                <span *ngFor="let error of firstNameBackEndErrors" class="error-msg">{{error}}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="middleName">Middlename:</label> <br />
+                            <input type="text" class="form-control" id="middleName" formControlName="middleName" [ngClass]="{ 'is-invalid': (f.middleName.touched && f.middleName.errors) || middleNameBackEndErrors }"/>
+                            <div *ngIf="f.middleName.touched && f.middleName.errors" class="invalid-feedback">
+                                <div *ngIf="f.middleName.errors.required"><span class="error-msg">This field is required</span></div>
+                            </div>
+                            <div>
+                                <span *ngFor="let error of middleNameBackEndErrors" class="error-msg">{{error}}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="lastName">Lastname:</label> <br />
+                            <input type="text" class="form-control" id="lastName" formControlName="lastName" [ngClass]="{ 'is-invalid': (f.lastName.touched && f.lastName.errors) || lastNameBackEndErrors }"/>
+                            <div *ngIf="f.lastName.touched && f.lastName.errors" class="invalid-feedback">
+                                <div *ngIf="f.lastName.errors.required"><span class="error-msg">This field is required</span></div>
+                            </div>
+                            <div>
+                                <span *ngFor="let error of lastNameBackEndErrors" class="error-msg">{{error}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 ">
+                            <br>
+                            <button type="submit" class="btn btn-primary" style="margin-top: 5px;" [disabled]="!authorUpdateForm.valid || isSubmit">Add</button>
+                        </div>
+                    </div>
+                </form>   
+            </div>
+            
+        </div>
+    </div>

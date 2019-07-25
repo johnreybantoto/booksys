@@ -26,6 +26,9 @@ import { LoginComponent } from './views/auth/login/login.component';
 import { ForbiddenComponent } from './views/auth/forbidden/forbidden.component';
 import { AuthInterceptor } from './guard/auth.interceptor';
 import { ForgotPasswordComponent } from './views/auth/forgot-password/forgot-password.component';
+import { AuthorAddFormComponent } from './views/author/author-add-form/author-add-form.component';
+import { AuthorUpdateFormComponent } from './views/author/author-update-form/author-update-form.component';
+import { AuthorComponent } from './views/author/author.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +48,10 @@ import { ForgotPasswordComponent } from './views/auth/forgot-password/forgot-pas
     DialogWrapperComponent,
     LoginComponent,
     ForbiddenComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    AuthorAddFormComponent,
+    AuthorUpdateFormComponent,
+    AuthorComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

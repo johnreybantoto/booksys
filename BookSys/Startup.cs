@@ -81,6 +81,7 @@ namespace BookSys
             services.AddScoped<BookService>();
             services.AddScoped<GenreService>();
             services.AddScoped<UserService>();
+            services.AddScoped<AuthorService>();
             #endregion
         }
 

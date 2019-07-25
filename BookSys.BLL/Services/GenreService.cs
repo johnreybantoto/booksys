@@ -11,8 +11,8 @@ namespace BookSys.BLL.Services
 {
     public class GenreService : IGenericService<GenreVM, long>
     {
-        private ToViewModel toViewModel = new ToViewModel();
-        private ToModel toModel = new ToModel();
+        private readonly ToViewModel toViewModel = new ToViewModel();
+        private readonly ToModel toModel = new ToModel();
         private readonly BookSysContext context;
 
         // inject dependencies

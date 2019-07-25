@@ -21,5 +21,7 @@ namespace BookSys.DAL.Models
         [ForeignKey("Genre")]
         public long GenreID { get; set; }
         public Genre Genre { get; set; }
+
+        public List<BookAuthor> BookAuthors { get; set; }
     }
 }

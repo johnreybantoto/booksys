@@ -2,6 +2,7 @@
 using BookSys.ViewModel.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace BookSys.BLL.Helpers
@@ -17,7 +18,8 @@ namespace BookSys.BLL.Helpers
                 Title = book.Title,
                 Copyright = book.Copyright,
                 GenreID = book.GenreID,
-                Genre = Genre(book.Genre)
+                Genre = Genre(book.Genre),
+                Authors = BookAuthor(book.BookAuthors),
             };
         }
 
@@ -41,5 +43,38 @@ namespace BookSys.BLL.Helpers
                 UserName = user.UserName
             };
         }
+
+        public AuthorVM Author(Author author)
+        {
+            return new AuthorVM
+            {
+                ID = author.ID,
+                MyGuid = author.MyGuid,
+                FirstName = author.FirstName,
+                MiddleName = author.MiddleName,
+                LastName = author.LastName,
+                FullName = $"{author.FirstName}{ author.MiddleName}{ author.LastName}"
+            };
+        }
+
+        // converts List<BookAuthor> to List<BookAuthorVM>
+        private List<AuthorVM> BookAuthor(List<BookAuthor> bookAuthor)
+        {
+            // to do: used lambda and linq
+            List<AuthorVM> authorLists = new List<AuthorVM>();
+            if (bookAuthor != null)
+            {
+               foreach(var ba in bookAuthor)
+                {
+                    var author = Author(ba.Author);
+                    authorLists.Add(author);
+                }
+            } else
+            {
+                authorLists = null;
+            }
+            return authorLists;
+        }
+
     }
 }

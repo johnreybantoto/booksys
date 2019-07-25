@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, OnInit, OnChanges } from '@angular/core';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { BookService } from 'src/app/services/book.service';
 import { BookDataService } from 'src/app/dataservices/book.dataservice';
 import { Genre } from 'src/app/models/genre.model';
@@ -7,13 +7,14 @@ import { GenreService } from 'src/app/services/genre.service';
 import { GenreDataService } from 'src/app/dataservices/genre.dataservice';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { GenreComponent } from '../../genre/genre.component';
+import { Author } from 'src/app/models/author.model';
 
 @Component({
   selector: 'app-book-add-form',
   templateUrl: './book-add-form.component.html',
   styleUrls: ['./book-add-form.component.css']
 })
-export class BookAddFormComponent implements OnInit {
+export class BookAddFormComponent implements OnInit, OnChanges {
   bookCreateForm: FormGroup;
   isSubmit = false;
 
@@ -23,18 +24,23 @@ export class BookAddFormComponent implements OnInit {
   genresList: Genre[];
 
   dialogOpen = false;
+
+  bookAuthor: Author;
+
   constructor(
     private bookService: BookService,
     private bookDataService: BookDataService,
     private genreService: GenreService,
     private genreDataService: GenreDataService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private formBuilder: FormBuilder
   ) { 
-    this.bookCreateForm = new FormGroup({
+    this.bookCreateForm = this.formBuilder.group({
       title: new FormControl('', [Validators.required, Validators.maxLength(50)]),
       copyright: new FormControl('', [Validators.required, Validators.maxLength(4)]),
       genreID: new FormControl('', Validators.required),
-      genreSelect: new FormControl('', Validators.required)
+      genreSelect: new FormControl('', Validators.required),
+      authorIdList: this.formBuilder.array([])
     })
   }
 
@@ -44,8 +50,15 @@ export class BookAddFormComponent implements OnInit {
     })
   }
 
+  ngOnChanges(){
+    console.log(this.bookAuthor);
+  }
+
   get f() { return this.bookCreateForm.controls; }
 
+  addedAuthor($event){
+    this.bookAuthor = $event;
+  }
 
   async onFormSubmit() {
     let ok = confirm("Are you sure you want to submit?");

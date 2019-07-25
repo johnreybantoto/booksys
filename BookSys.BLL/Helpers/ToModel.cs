@@ -29,5 +29,17 @@ namespace BookSys.BLL.Helpers
                 Name = genreVM.Name
             };
         }
+        public Author Author(AuthorVM authorVM)
+        {
+            return new Author
+            {
+                ID = authorVM.ID,
+                MyGuid = authorVM.MyGuid,
+                FirstName = authorVM.FirstName,
+                MiddleName = authorVM.MiddleName,
+                LastName = authorVM.LastName
+            };
+        }
+     
     }
 }

@@ -30,10 +30,25 @@ namespace BookSys.BLL.Services
                 {
                     try
                     {
-                        // toModel.Book(bookVM) == converts to Book type then save to context
                         bookVM.MyGuid = Guid.NewGuid();
-                        context.Books.Add(toModel.Book(bookVM));
+                        // saves the book first then assign the entity to bookSaved where we will get the generated id
+                        var bookSaved = context.Books.Add(toModel.Book(bookVM)).Entity;
                         context.SaveChanges();
+
+                        foreach (var authID in bookVM.AuthorIdList)
+                        {
+                            // validates existence of author
+                            if(context.Authors.Find(authID) == null)
+                                return new ResponseVM("created", false, "Book", "Author does not exists");
+                            // saves to bookauthor
+                            var bookAuthor = new BookAuthor
+                            {
+                                AuthorID = authID,
+                                BookID = bookSaved.ID
+                            };
+                            context.BookAuthors.Add(bookAuthor);
+                            context.SaveChanges();
+                        }
 
                         // commits changes to db
                         dbTransaction.Commit();
@@ -61,6 +76,11 @@ namespace BookSys.BLL.Services
                         {
                             return new ResponseVM("deleted", false, "Book", ResponseVM.DOES_NOT_EXIST);
                         }
+
+                        var bookRemoveFromBookAuthors = context.BookAuthors.Where(x => x.BookID == bookToBeDeleted.ID);
+                        context.BookAuthors.RemoveRange(bookRemoveFromBookAuthors);
+                        context.SaveChanges();
+
                         // delete from database
                         context.Books.Remove(bookToBeDeleted);
                         context.SaveChanges();
@@ -88,6 +108,8 @@ namespace BookSys.BLL.Services
                         // gets all books record and order from highest to lowest
                         var books = context.Books
                                            .Include(x => x.Genre)
+                                           .Include(x => x.BookAuthors)
+                                           .ThenInclude(x => x.Author)
                                            .ToList()
                                            .OrderByDescending(x => x.ID);
                         var booksVm = books.Select(x => toViewModel.Book(x));
@@ -112,6 +134,8 @@ namespace BookSys.BLL.Services
                         // returns one record based on passed id
                         var book = context.Books
                                         .Include( x => x.Genre)
+                                        .Include(x => x.BookAuthors)
+                                        .ThenInclude(x => x.Author)
                                         .Where(x => x.ID == id)
                                         .FirstOrDefault();
                         BookVM bookVm = null;
@@ -148,6 +172,26 @@ namespace BookSys.BLL.Services
                         bookToBeUpdated.Title = bookVM.Title;
                         bookToBeUpdated.Copyright = bookVM.Copyright;
                         bookToBeUpdated.GenreID = bookVM.GenreID;
+
+                        // remove all first before updating
+                        var bookRemoveFromBookAuthors = context.BookAuthors.Where(x => x.BookID == bookToBeUpdated.ID);
+                        context.BookAuthors.RemoveRange(bookRemoveFromBookAuthors);
+                        context.SaveChanges();
+
+                        foreach (var authID in bookVM.AuthorIdList)
+                        {
+                            // validates existence of author
+                            if (context.Authors.Find(authID) == null)
+                                return new ResponseVM("created", false, "Book", "Author does not exists");
+                            // saves to bookauthor
+                            var bookAuthor = new BookAuthor
+                            {
+                                AuthorID = authID,
+                                BookID = bookToBeUpdated.ID
+                            };
+                            context.BookAuthors.Add(bookAuthor);
+                            context.SaveChanges();
+                        }
                         context.SaveChanges();
 
                         dbTransaction.Commit();
@@ -176,10 +220,12 @@ namespace BookSys.BLL.Services
                 // search if user provided a search value, i.e. search value is not empty
                 if (!string.IsNullOrEmpty(paging.Search.Value))
                 {
-                    // search based from the search value
+                    // search based from the search value     
                     query = context.Books.Include(x => x.Genre)
+                                         .Include(x => x.BookAuthors)
+                                         .ThenInclude(x => x.Author)
                                          .Where(v => v.Title.ToString().ToLower().Contains(paging.Search.Value.ToLower()) || 
-                                                     v.Copyright.ToString().ToLower().Contains(paging.Search.Value.ToLower()) || 
+                                                     v.Copyright.ToString().ToLower().Contains(paging.Search.Value.ToLower()) ||
                                                      v.Genre.Name.ToString().ToLower().Contains(paging.Search.Value.ToLower()));
                 }
                 else

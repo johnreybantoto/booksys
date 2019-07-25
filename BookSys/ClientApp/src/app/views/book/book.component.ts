@@ -44,7 +44,6 @@ export class BookComponent implements AfterViewInit, OnDestroy, OnInit {
   // call the getAll function then asign to books to be displayed
   async getBooks(){
     try {
-      console.log('hey')
       this.dtOptions = {    
         pagingType: "full_numbers",    
         pageLength: 10,    
