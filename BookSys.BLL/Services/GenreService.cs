@@ -97,7 +97,7 @@ namespace BookSys.BLL.Services
             }
         }
 
-        public GenreVM GetSingleBy(long id)
+        public GenreVM GetSingleBy(string guid)
         {
             using (context)
             {
@@ -106,7 +106,9 @@ namespace BookSys.BLL.Services
                     try
                     {
                         // returns one record based on passed id
-                        var genre = context.Genres.Find(id);
+                        var genre = context.Genres
+                                        .Where(x => x.MyGuid.ToString() == guid)
+                                        .FirstOrDefault();
                         GenreVM genreVm = null;
                         if(genre != null)
                             genreVm = toViewModel.Genre(genre);

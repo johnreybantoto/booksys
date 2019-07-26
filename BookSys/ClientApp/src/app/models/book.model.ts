@@ -1,4 +1,5 @@
 import { Genre } from './genre.model';
+import { Author } from './author.model';
 
 export interface Book {
     id: number;
@@ -7,4 +8,6 @@ export interface Book {
     copyright: number;
     genreID: number;
     genre: Genre;
+    authors: Author[];
+    authorIdList: number[];
 }

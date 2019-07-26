@@ -17,5 +17,7 @@ namespace BookSys.DAL.Models
 
         public long AuthorID { get; set; }
         public Author Author { get; set; }
+
+        public string AuthorFullName { get; set; }
     }
 }

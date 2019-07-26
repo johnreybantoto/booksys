@@ -97,7 +97,7 @@ namespace BookSys.BLL.Services
             }
         }
 
-        public AuthorVM GetSingleBy(long id)
+        public AuthorVM GetSingleBy(string guid)
         {
             using (context)
             {
@@ -106,7 +106,9 @@ namespace BookSys.BLL.Services
                     try
                     {
                         // returns one record based on passed id
-                        var author = context.Authors.Find(id);
+                        var author = context.Authors
+                                        .Where(x => x.MyGuid.ToString() == guid)
+                                        .FirstOrDefault();
                         AuthorVM authorVm = null;
                         if(author != null)
                             authorVm = toViewModel.Author(author);

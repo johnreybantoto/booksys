@@ -6,3 +6,4 @@ D:\PROJECTS\BookSys\BookSys.ViewModel\obj\Debug\netcoreapp2.2\BookSys.ViewModel.
 D:\PROJECTS\BookSys\BookSys.ViewModel\obj\Debug\netcoreapp2.2\BookSys.ViewModel.AssemblyInfo.cs
 D:\PROJECTS\BookSys\BookSys.ViewModel\obj\Debug\netcoreapp2.2\BookSys.ViewModel.dll
 D:\PROJECTS\BookSys\BookSys.ViewModel\obj\Debug\netcoreapp2.2\BookSys.ViewModel.pdb
+D:\PROJECTS\BookSys\BookSys.ViewModel\obj\Debug\netcoreapp2.2\BookSys.ViewModel.csprojAssemblyReference.cache

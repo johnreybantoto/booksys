@@ -59,7 +59,7 @@ export class BookComponent implements AfterViewInit, OnDestroy, OnInit {
             data: []    
           });    
         },    
-        columns: [null, null, null, null]    
+        columns: [null, null, null, null, null]    
       };
       this.rerender()
     } catch (error) {
@@ -87,10 +87,12 @@ export class BookComponent implements AfterViewInit, OnDestroy, OnInit {
 
   update(book){
     const dialogConfig = new MatDialogConfig();
+    book.authorIdList = book.authors.map(data => {return data.id})
     dialogConfig.data = {
       bookContext: book
     };
     dialogConfig.width = '600px';
+    dialogConfig.maxHeight = '1000px';
     this.dialogOpen =  true;
     let dialogRef = this.dialog.open(BookUpdateFormComponent, dialogConfig)
     dialogRef.afterClosed().subscribe( data => {

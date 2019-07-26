@@ -52,7 +52,7 @@ namespace AuthorSys.Controllers
 
         // api/Author/GetSingleBy/id
         [HttpGet("[action]/{id}")]
-        public AuthorVM GetSingleBy(long id)
+        public AuthorVM GetSingleBy(string id)
         {
             return authorService.GetSingleBy(id);
         }

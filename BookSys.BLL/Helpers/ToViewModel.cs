@@ -53,7 +53,7 @@ namespace BookSys.BLL.Helpers
                 FirstName = author.FirstName,
                 MiddleName = author.MiddleName,
                 LastName = author.LastName,
-                FullName = $"{author.FirstName}{ author.MiddleName}{ author.LastName}"
+                FullName = $"{author.FirstName}{ (string.IsNullOrEmpty(author.MiddleName) ? "" : " " + author.MiddleName) }{(string.IsNullOrEmpty(author.LastName) ? "" : " " + author.LastName)}"
             };
         }
 

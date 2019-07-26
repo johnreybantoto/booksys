@@ -7,7 +7,7 @@
         <div class="jumbotron">
             <form (ngSubmit)="onFormSubmit()" method="post" [formGroup]="bookEditForm">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <label for="title">Title: <span style="color: red">*</span></label> <br />
                         <input type="text" class="form-control" id="title" formControlName="title" [ngClass]="{ 'is-invalid': (f.title.touched && f.title.errors) || titleBackEndErrors }"/>
                         <div *ngIf="f.title.touched && f.title.errors" class="invalid-feedback">
@@ -27,29 +27,73 @@
                             <span *ngFor="let error of copyrightBackEndErrors" style="color: red; font-size: 10pt;">{{error}}</span>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                            <label for="genreID">Genre: <span style="color: red">*</span></label> <br />
-                            <input type="text" id="genreID" formControlName="genreID" hidden/>
-                            <div>
-                                <input type="text" class="form-control" formControlName="genreSelect" (keyup)="selectGenre($event)" (click)="$event.target.select()" list="genresListss">
-                                <datalist class="ui-datalist-data" height="100px" id="genresListss" >
-                                    <option [ngValue]="null" disabled="true" [selected]="true">Choose a genre
-                                    <option id="{{genre.id}}" *ngFor="let genre of genresList" [value]="genre.name">
-                                </datalist>
-                                <div *ngIf="f.genreSelect.touched && f.genreSelect.errors" class="invalid-feedback">
-                                    <div *ngIf="f.genreSelect.errors.required"><span style="color: red; font-size: 10pt">This field is required</span></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <label for="genreID">Genre: <span style="color: red">*</span></label> <br />
+                                <input type="text" id="genreID" formControlName="genreID" hidden/>
+                                <div>
+                                    <input type="text" class="form-control" formControlName="genreSelect" (keyup)="selectGenre($event)" (click)="$event.target.select()" list="genresListss">
+                                    <datalist class="ui-datalist-data" height="100px" id="genresListss" >
+                                        <option [ngValue]="null" disabled="true" [selected]="true">Choose a genre
+                                        <option id="{{genre.id}}" *ngFor="let genre of genresList" [value]="genre.name">
+                                    </datalist>
+                                    <div *ngIf="f.genreSelect.touched && f.genreSelect.errors" class="invalid-feedback">
+                                        <div *ngIf="f.genreSelect.errors.required"><span style="color: red; font-size: 10pt">This field is required</span></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-1">
-                            <br>
-                            <button type="button" class="btn btn-info btn-trans" (click)="openGenreDialog()" data-toggle="tooltip" data-placement="bottom" title="Add new genre"><i class="material-icons">add</i></button>
+                            <div class="col-md-1">
+                                <br>
+                                <button type="button" class="btn btn-info btn-trans" (click)="openGenreDialog()" data-toggle="tooltip" data-placement="bottom" title="Add new genre"><i class="material-icons">add</i></button>
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <br>
-                        <button type="submit" class="btn btn-primary" style="margin-top: 5px;" [disabled]="!bookEditForm.valid || isSubmit">Update</button>
+                    
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="col-md-11">
+                                <label >Authors:</label> <br />
+                                <div>
+                                    <input type="text" class="form-control" (keyup)="selectAuthor($event)" (click)="$event.target.select()" formControlName="authorSelect" list="authorsListss">
+                                    <datalist class="ui-datalist-data" height="100px" id="authorsListss" >
+                                        <option [ngValue]="null" disabled="true" [selected]="true">Choose an author
+                                        <option id="{{author.id}}" *ngFor="let author of authorsList" [value]="author.fullName">
+                                    </datalist>
+                                    <div *ngIf="f.authorSelect.touched && f.authorSelect.errors" class="invalid-feedback">
+                                        <div *ngIf="f.authorSelect.errors.required"><span style="color: red; font-size: 10pt">This field is required</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <br>
+                                <button type="button" class="btn btn-success btn-trans" (click)="openAuthorDialog()" data-toggle="tooltip" data-placement="bottom" title="Add new genre"><i class="material-icons">add</i></button>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="selectedAuthors.length > 0">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <td>Author</td>
+                                        <td>Remove</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let author of selectedAuthors">
+                                        <td>{{author.fullName}}</td>
+                                        <td><button type="button" class="btn btn-warning btn-trans" (click)="removeAuthor(author)" data-toggle="tooltip" data-placement="bottom" title="Remove author"><i class="material-icons">delete</i></button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+                </div>
+                <div class="row">
+                    <br>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 5px;" [disabled]="!bookEditForm.valid || isSubmit">Update</button>
+                </div>
             </form>   
         </div>
     </div>

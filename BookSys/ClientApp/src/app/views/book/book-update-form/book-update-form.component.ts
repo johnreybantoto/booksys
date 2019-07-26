@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { BookService } from 'src/app/services/book.service';
 import { BookDataService } from 'src/app/dataservices/book.dataservice';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatDialogConfig } from '@angular/material';
@@ -8,6 +8,10 @@ import { Genre } from 'src/app/models/genre.model';
 import { GenreService } from 'src/app/services/genre.service';
 import { GenreDataService } from 'src/app/dataservices/genre.dataservice';
 import { GenreComponent } from '../../genre/genre.component';
+import { AuthorComponent } from '../../author/author.component';
+import { Author } from 'src/app/models/author.model';
+import { AuthorService } from 'src/app/services/author.service';
+import { AuthorDataService } from 'src/app/dataservices/author.dataservice';
 
 @Component({
   selector: 'app-book-update-form',
@@ -25,22 +29,31 @@ export class BookUpdateFormComponent implements OnInit {
 
   genresList: Genre[];
   initialized = false;
+  
+  authorsList: Author[];
+  selectedAuthors: Author[] = [];
 
   constructor(
     private bookService: BookService,
     private bookDataService: BookDataService,
     private genreService: GenreService,
     private genreDataService: GenreDataService,
+    private authorService: AuthorService,
+    private authorDataService: AuthorDataService,
     private dialog: MatDialog,
+    private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<BookUpdateFormComponent>,
     @Inject(MAT_DIALOG_DATA) data
   ) { 
-    this.bookEditForm = new FormGroup({
+    this.bookEditForm = this.formBuilder.group({
       id: new FormControl(),
       title: new FormControl('', [Validators.required, Validators.maxLength(50)]),
       copyright: new FormControl('', [Validators.required, Validators.maxLength(4)]),
       genreID: new FormControl('', Validators.required),
-      genreSelect: new FormControl('', Validators.required)
+      genreSelect: new FormControl('', Validators.required),
+      authorID: new FormControl(''),
+      authorSelect: new FormControl(''),
+      authorIdList: this.formBuilder.array([])
     })
     this.bookContext = data;
   }
@@ -50,19 +63,33 @@ export class BookUpdateFormComponent implements OnInit {
   async ngOnInit() {
     this.bookToBeEditted = this.bookContext.bookContext;
     // to show update genre lists when genre is updated
-    this.bookDataService.bookSource.subscribe(data => {
-      this.getGenreLists();
+    this.genreDataService.genreSource.subscribe(async data => {
+      await this.getGenreLists();
+      if(!this.initialized){
+        this.change()
+        this.initialized = true;
+      }
     })
+    this.authorDataService.authorSource.subscribe(async data => {
+      await this.getAuthorLists();
+      if(!this.initialized){
+        this.change()
+        this.initialized = true;
+      }
+    })
+
   }
   
   change(){
     this.bookEditForm.controls['title'].setValue(this.bookToBeEditted.title);
     this.bookEditForm.controls['copyright'].setValue(this.bookToBeEditted.copyright);
     this.bookEditForm.controls['genreID'].setValue(this.bookToBeEditted.genreID);
-    
-    let genreName = this.genresList.find(data => data.id === this.bookToBeEditted.genreID)
 
+    let genreName = this.genresList.find(data => data.id === this.bookToBeEditted.genreID)
     this.bookEditForm.controls['genreSelect'].setValue(genreName.name);
+    this.selectedAuthors = this.bookToBeEditted.authors;
+    console.log(this.selectedAuthors)
+    console.log(this.bookEditForm.value)
   }
 
   close(){
@@ -85,6 +112,8 @@ export class BookUpdateFormComponent implements OnInit {
       this.titleBackEndErrors = null; // resets backendErrors
       this.copyrightBackEndErrors = null;
       this.bookEditForm.value.id = this.bookToBeEditted.id;
+                                            // assigns only the id of the selected authors
+      this.bookEditForm.value.authorIdList = this.selectedAuthors.map(data => {return data.id})
       let result = await this.bookService.update(this.bookEditForm.value).toPromise();
       if (result.isSuccess) {
         alert(result.message);
@@ -118,13 +147,17 @@ export class BookUpdateFormComponent implements OnInit {
     }
   }
 
+  async getAuthorLists(){
+    try {
+      this.authorsList = await this.authorService.getAll().toPromise();
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
   async getGenreLists(){
     try {
-      this.genresList = await this.genreService.getAll().toPromise();
-      if(!this.initialized){
-        this.change();
-        this.initialized;
-      }
+      this.genresList =  await this.genreService.getAll().toPromise();
     } catch (error) {
       console.log(error);
     }
@@ -143,13 +176,42 @@ export class BookUpdateFormComponent implements OnInit {
     }
   }
 
-  openGenreDialog(){
-    const dialogConfig = new MatDialogConfig();
-    
-    dialogConfig.width = '600px';
-    dialogConfig.height = '600px';
-
-    this.dialog.open(GenreComponent, dialogConfig)
+ // find the selected genre from the list
+ selectAuthor($event){
+  let author = this.bookEditForm.value.authorSelect;
+  if (author.length > 2) {
+    if ($event.timeStamp > 200) {
+      let selectedAuthor = this.authorsList.find(data => data.fullName == author);
+      if(selectedAuthor){
+        // checks if selected author does exists in the lists of selected
+        if(!this.selectedAuthors.some(data => data === selectedAuthor))
+          this.selectedAuthors.push(selectedAuthor);
+      }
+    }
   }
+}
+
+ // find the selected genre from the list
+ removeAuthor(author){
+  // checks if selected author does exists in the lists of selected
+  let newAuthorLists = this.selectedAuthors.filter(data => data != author );
+  this.selectedAuthors = newAuthorLists
+}
+
+openGenreDialog(){
+  const dialogConfig = new MatDialogConfig();
+  
+  dialogConfig.width = '600px';
+  dialogConfig.height = '600px';
+  this.dialog.open(GenreComponent, dialogConfig)
+}
+
+openAuthorDialog(){
+  const dialogConfig = new MatDialogConfig();
+  
+  dialogConfig.width = '600px';
+  dialogConfig.height = '600px';
+  this.dialog.open(AuthorComponent, dialogConfig)
+}
  
 }

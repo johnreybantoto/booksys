@@ -24,7 +24,8 @@ namespace BookSys.Controllers
         }
 
         [HttpPost("[action]")]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public async Task<ActionResult<ResponseVM>> Register([FromBody] UserVM userVM)
         {
             if (ModelState.IsValid)

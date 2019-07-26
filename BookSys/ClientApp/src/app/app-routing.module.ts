@@ -17,7 +17,7 @@ const routes: Routes = [
   { path: 'fetch-data', component: FetchDataComponent, canActivate:[AuthGuard] },
   { path: 'my-sample', component: MySampleComponent, canActivate:[AuthGuard] },
   { path: 'book', component: BookComponent, canActivate:[AuthGuard] },
-  { path: 'register', component: RegisterComponent, canActivate: [AuthGuard], data: {permittedRoles: ['Admin'] } },
+  { path: 'register', component: RegisterComponent },
   { path: 'author', component: AuthorComponent, canActivate: [AuthGuard], data: {permittedRoles: ['Admin'] } },
   { path: 'forbidden', component: ForbiddenComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },

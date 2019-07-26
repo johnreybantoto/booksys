@@ -24,13 +24,13 @@ export class AuthorComponent implements AfterViewInit, OnDestroy, OnInit {
   authors: Author[];
   currentRoute: string;
 
-  @Output() selectedAuthor = new EventEmitter<Author>();
 
   constructor(
     private authorService: AuthorService,
     private authorDataService: AuthorDataService,
     public dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    public dialogRef: MatDialogRef<AuthorComponent>
   ) { 
     this.currentRoute = this.router.url;
   }
@@ -96,9 +96,5 @@ export class AuthorComponent implements AfterViewInit, OnDestroy, OnInit {
       // Call the dtTrigger to rerender again
       this.dtTrigger.next();
     });
-  }
-
-  selectAuthor(author: Author){
-    this.selectedAuthor.emit(author);
   }
 }

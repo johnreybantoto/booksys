@@ -9,6 +9,22 @@ namespace BookSys.DAL.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Authors",
+                columns: table => new
+                {
+                    ID = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    MyGuid = table.Column<Guid>(nullable: false),
+                    FirstName = table.Column<string>(nullable: true),
+                    MiddleName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Authors", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Genres",
                 columns: table => new
                 {
@@ -58,7 +74,9 @@ namespace BookSys.DAL.Migrations
                     Discriminator = table.Column<string>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
                     MiddleName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true)
+                    LastName = table.Column<string>(nullable: true),
+                    Question = table.Column<string>(nullable: true),
+                    Answer = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -193,6 +211,43 @@ namespace BookSys.DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "BookAuthors",
+                columns: table => new
+                {
+                    ID = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    BookID = table.Column<long>(nullable: false),
+                    AuthorID = table.Column<long>(nullable: false),
+                    AuthorFullName = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookAuthors", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_BookAuthors_Authors_AuthorID",
+                        column: x => x.AuthorID,
+                        principalTable: "Authors",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookAuthors_Books_BookID",
+                        column: x => x.BookID,
+                        principalTable: "Books",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookAuthors_AuthorID",
+                table: "BookAuthors",
+                column: "AuthorID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookAuthors_BookID",
+                table: "BookAuthors",
+                column: "BookID");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Books_GenreID",
                 table: "Books",
@@ -241,7 +296,7 @@ namespace BookSys.DAL.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Books");
+                name: "BookAuthors");
 
             migrationBuilder.DropTable(
                 name: "RoleClaims");
@@ -259,13 +314,19 @@ namespace BookSys.DAL.Migrations
                 name: "UserTokens");
 
             migrationBuilder.DropTable(
-                name: "Genres");
+                name: "Authors");
+
+            migrationBuilder.DropTable(
+                name: "Books");
 
             migrationBuilder.DropTable(
                 name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Genres");
         }
     }
 }

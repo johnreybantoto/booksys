@@ -4,17 +4,19 @@
 <table style="width: 100%;" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-hover table-striped">
     <thead>
         <tr>
-            <td style="width: 40%">Titles</td>
-            <td style="width: 20%">Copyright</td>
+            <td style="width: 30%">Titles</td>
+            <td style="width: 10%">Copyright</td>
             <td style="width: 20%">Genre</td>
+            <td style="width: 20%">Authors</td>
             <td style="width: 20%"></td>
         </tr>
     </thead>
     <tbody  *ngIf="books != null || books?.length != 0">
         <tr *ngFor="let book of books">
-            <td style="width: 40%">{{book.title}}</td>
-            <td style="width: 20%">{{book.copyright}}</td>
+            <td style="width: 30%">{{book.title}}</td>
+            <td style="width: 10%">{{book.copyright}}</td>
             <td style="width: 20%">{{book.genre.name}}</td>
+            <td style="width: 20%"><div *ngFor="let author of book.authors">{{author.fullName}}</div></td>
             <td style="width: 20%">
                 <div class="row">
                     <button class="col-md-5 btn btn-success m-1" (click)="update(book)" data-toggle="tooltip" data-placement="bottom" title="Update book" ><i class="material-icons">update</i></button>

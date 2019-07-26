@@ -8,13 +8,16 @@ import { GenreDataService } from 'src/app/dataservices/genre.dataservice';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { GenreComponent } from '../../genre/genre.component';
 import { Author } from 'src/app/models/author.model';
+import { AuthorService } from 'src/app/services/author.service';
+import { AuthorDataService } from 'src/app/dataservices/author.dataservice';
+import { AuthorComponent } from '../../author/author.component';
 
 @Component({
   selector: 'app-book-add-form',
   templateUrl: './book-add-form.component.html',
   styleUrls: ['./book-add-form.component.css']
 })
-export class BookAddFormComponent implements OnInit, OnChanges {
+export class BookAddFormComponent implements OnInit {
   bookCreateForm: FormGroup;
   isSubmit = false;
 
@@ -25,13 +28,16 @@ export class BookAddFormComponent implements OnInit, OnChanges {
 
   dialogOpen = false;
 
-  bookAuthor: Author;
+  authorsList: Author[];
+  selectedAuthors: Author[] = [];
 
   constructor(
     private bookService: BookService,
     private bookDataService: BookDataService,
     private genreService: GenreService,
     private genreDataService: GenreDataService,
+    private authorService: AuthorService,
+    private authorDataService: AuthorDataService,
     private dialog: MatDialog,
     private formBuilder: FormBuilder
   ) { 
@@ -40,6 +46,8 @@ export class BookAddFormComponent implements OnInit, OnChanges {
       copyright: new FormControl('', [Validators.required, Validators.maxLength(4)]),
       genreID: new FormControl('', Validators.required),
       genreSelect: new FormControl('', Validators.required),
+      authorID: new FormControl(''),
+      authorSelect: new FormControl(''),
       authorIdList: this.formBuilder.array([])
     })
   }
@@ -48,18 +56,13 @@ export class BookAddFormComponent implements OnInit, OnChanges {
     this.genreDataService.genreSource.subscribe(data => {
       this.getGenreLists();
     })
+    this.authorDataService.authorSource.subscribe(data => {
+      this.getAuthorLists();
+    })
   }
-
-  ngOnChanges(){
-    console.log(this.bookAuthor);
-  }
-
+ 
   get f() { return this.bookCreateForm.controls; }
-
-  addedAuthor($event){
-    this.bookAuthor = $event;
-  }
-
+ 
   async onFormSubmit() {
     let ok = confirm("Are you sure you want to submit?");
     // ends the function if the user did not confirm
@@ -75,10 +78,15 @@ export class BookAddFormComponent implements OnInit, OnChanges {
       this.isSubmit = true; // sets the isSubmit, disables button
       this.titleBackEndErrors = null; // resets backendErrors
       this.copyrightBackEndErrors = null;
+      if(this.selectedAuthors){
+                                                 // assigns only the id of the selected authors
+        this.bookCreateForm.value.authorIdList = this.selectedAuthors.map(data => {return data.id})
+      }
       let result = await this.bookService.create(this.bookCreateForm.value).toPromise();
       if (result.isSuccess) {
         alert(result.message);
         this.bookCreateForm.reset();
+        this.selectedAuthors = [];
         this.bookDataService.refreshBooks(); // triggers a function that will refresh other component that subscribe to it
       }
       else {
@@ -115,6 +123,14 @@ export class BookAddFormComponent implements OnInit, OnChanges {
     }
   }
 
+  async getAuthorLists(){
+    try {
+      this.authorsList = await this.authorService.getAll().toPromise();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   // find the selected genre from the list
   selectGenre($event){
     let genre = this.bookCreateForm.value.genreSelect;
@@ -128,11 +144,40 @@ export class BookAddFormComponent implements OnInit, OnChanges {
     }
   }
 
+  // find the selected genre from the list
+  selectAuthor($event){
+    let author = this.bookCreateForm.value.authorSelect;
+    if (author.length > 2) {
+      if ($event.timeStamp > 200) {
+        let selectedAuthor = this.authorsList.find(data => data.fullName == author);
+        if(selectedAuthor){
+          // checks if selected author does exists in the lists of selected
+          if(!this.selectedAuthors.some(data => data === selectedAuthor))
+            this.selectedAuthors.push(selectedAuthor);
+        }
+      }
+    }
+  }
+
+   // find the selected genre from the list
+   removeAuthor(author){
+    // checks if selected author does exists in the lists of selected
+    let newAuthorLists = this.selectedAuthors.filter(data => data != author );
+    this.selectedAuthors = newAuthorLists
+  }
+
   openGenreDialog(){
     const dialogConfig = new MatDialogConfig();
     
     dialogConfig.width = '600px';
     dialogConfig.height = '600px';
     this.dialog.open(GenreComponent, dialogConfig)
+  }
+
+  openAuthorDialog(){
+    const dialogConfig = new MatDialogConfig();
+    
+    dialogConfig.width = '700px';
+    this.dialog.open(AuthorComponent, dialogConfig)
   }
 }

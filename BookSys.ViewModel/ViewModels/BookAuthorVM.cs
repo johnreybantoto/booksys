@@ -13,5 +13,7 @@ namespace BookSys.ViewModel.ViewModels
 
         public long AuthorID { get; set; }
         public AuthorVM Author { get; set; }
+
+        public string AuthorFullName { get; set; }
     }
 }

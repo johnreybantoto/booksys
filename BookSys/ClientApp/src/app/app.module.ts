@@ -29,6 +29,7 @@ import { ForgotPasswordComponent } from './views/auth/forgot-password/forgot-pas
 import { AuthorAddFormComponent } from './views/author/author-add-form/author-add-form.component';
 import { AuthorUpdateFormComponent } from './views/author/author-update-form/author-update-form.component';
 import { AuthorComponent } from './views/author/author.component';
+import { BookDetailsComponent } from './views/book/book-details/book-details.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { AuthorComponent } from './views/author/author.component';
     ForgotPasswordComponent,
     AuthorAddFormComponent,
     AuthorUpdateFormComponent,
-    AuthorComponent
+    AuthorComponent,
+    BookDetailsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -64,7 +66,7 @@ import { AuthorComponent } from './views/author/author.component';
     ToastrModule.forRoot(),
     DataTablesModule
   ],
-  entryComponents:[BookUpdateFormComponent, GenreUpdateFormComponent, GenreComponent],
+  entryComponents:[BookUpdateFormComponent, GenreUpdateFormComponent, GenreComponent, AuthorUpdateFormComponent, AuthorComponent],
   providers: [
     { provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

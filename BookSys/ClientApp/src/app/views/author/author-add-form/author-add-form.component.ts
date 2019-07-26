@@ -73,8 +73,8 @@ export class AuthorAddFormComponent implements OnInit {
         if('LastName' in errs.errors) {
           this.lastNameBackEndErrors = errs.errors.LastName; // shows the data annotations error message
         }
-        if('LastName' in errs.errors) {
-          this.lastNameBackEndErrors = errs.errors.LastName; // shows the data annotations error message
+        if('MiddleName' in errs.errors) {
+          this.middleNameBackEndErrors = errs.errors.MiddleName; // shows the data annotations error message
         } 
       }
 

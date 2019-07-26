@@ -27,20 +27,6 @@ namespace BookSys.DAL.Models
             builder.Entity<IdentityUserToken<string>>(entity => { entity.ToTable("UserTokens"); });
             builder.Entity<IdentityRoleClaim<string>>(entity => { entity.ToTable("RoleClaims"); });
 
-
-            // for BookAuthor m-to-m relationship
-            builder.Entity<BookAuthor>()
-           .HasKey(pt => new { pt.BookID, pt.AuthorID });
-
-            builder.Entity<BookAuthor>()
-                .HasOne(pt => pt.Book)
-                .WithMany(p => p.BookAuthors)
-                .HasForeignKey(pt => pt.BookID);
-
-            builder.Entity<BookAuthor>()
-                .HasOne(pt => pt.Author)
-                .WithMany(t => t.BookAuthors)
-                .HasForeignKey(pt => pt.AuthorID);
         }
 
 

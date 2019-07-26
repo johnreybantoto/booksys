@@ -63,17 +63,21 @@ namespace BookSys.DAL.Migrations
 
             modelBuilder.Entity("BookSys.DAL.Models.BookAuthor", b =>
                 {
-                    b.Property<long>("BookID");
+                    b.Property<long>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuthorFullName");
 
                     b.Property<long>("AuthorID");
 
-                    b.Property<long>("ID");
+                    b.Property<long>("BookID");
 
-                    b.HasKey("BookID", "AuthorID");
-
-                    b.HasAlternateKey("ID");
+                    b.HasKey("ID");
 
                     b.HasIndex("AuthorID");
+
+                    b.HasIndex("BookID");
 
                     b.ToTable("BookAuthors");
                 });

@@ -52,7 +52,7 @@ namespace BookSys.Controllers
 
         // api/Book/GetSingleBy/id
         [HttpGet("[action]/{id}")]
-        public BookVM GetSingleBy(long id)
+        public BookVM GetSingleBy(string id)
         {
             return bookService.GetSingleBy(id);
         }

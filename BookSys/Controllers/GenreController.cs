@@ -52,7 +52,7 @@ namespace GenreSys.Controllers
 
         // api/Genre/GetSingleBy/id
         [HttpGet("[action]/{id}")]
-        public GenreVM GetSingleBy(long id)
+        public GenreVM GetSingleBy(string id)
         {
             return genreService.GetSingleBy(id);
         }

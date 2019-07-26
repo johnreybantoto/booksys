@@ -38,13 +38,15 @@ namespace BookSys.BLL.Services
                         foreach (var authID in bookVM.AuthorIdList)
                         {
                             // validates existence of author
-                            if(context.Authors.Find(authID) == null)
+                            var author = context.Authors.Find(authID);
+                            if (author == null)
                                 return new ResponseVM("created", false, "Book", "Author does not exists");
                             // saves to bookauthor
                             var bookAuthor = new BookAuthor
                             {
                                 AuthorID = authID,
-                                BookID = bookSaved.ID
+                                BookID = bookSaved.ID,
+                                AuthorFullName = $"{author.FirstName}{ (string.IsNullOrEmpty(author.MiddleName) ? "" : " " + author.MiddleName) }{(string.IsNullOrEmpty(author.LastName) ? "" : " " + author.LastName)}"
                             };
                             context.BookAuthors.Add(bookAuthor);
                             context.SaveChanges();
@@ -123,7 +125,7 @@ namespace BookSys.BLL.Services
             }
         }
 
-        public BookVM GetSingleBy(long id)
+        public BookVM GetSingleBy(string guid)
         {
             using (context)
             {
@@ -136,7 +138,7 @@ namespace BookSys.BLL.Services
                                         .Include( x => x.Genre)
                                         .Include(x => x.BookAuthors)
                                         .ThenInclude(x => x.Author)
-                                        .Where(x => x.ID == id)
+                                        .Where(x => x.MyGuid.ToString() == guid)
                                         .FirstOrDefault();
                         BookVM bookVm = null;
                         if(book != null)
@@ -180,14 +182,16 @@ namespace BookSys.BLL.Services
 
                         foreach (var authID in bookVM.AuthorIdList)
                         {
-                            // validates existence of author
-                            if (context.Authors.Find(authID) == null)
-                                return new ResponseVM("created", false, "Book", "Author does not exists");
+                            // validates existence of author // validates existence of author
+                            var author = context.Authors.Find(authID);
+                            if (author == null)
+                                return new ResponseVM("updated", false, "Book", "Author does not exists");
                             // saves to bookauthor
                             var bookAuthor = new BookAuthor
                             {
                                 AuthorID = authID,
-                                BookID = bookToBeUpdated.ID
+                                BookID = bookToBeUpdated.ID,
+                                AuthorFullName = $"{author.FirstName}{ (string.IsNullOrEmpty(author.MiddleName) ? "" : " " + author.MiddleName) }{(string.IsNullOrEmpty(author.LastName) ? "" : " " + author.LastName)}"
                             };
                             context.BookAuthors.Add(bookAuthor);
                             context.SaveChanges();
@@ -226,12 +230,16 @@ namespace BookSys.BLL.Services
                                          .ThenInclude(x => x.Author)
                                          .Where(v => v.Title.ToString().ToLower().Contains(paging.Search.Value.ToLower()) || 
                                                      v.Copyright.ToString().ToLower().Contains(paging.Search.Value.ToLower()) ||
-                                                     v.Genre.Name.ToString().ToLower().Contains(paging.Search.Value.ToLower()));
+                                                     v.Genre.Name.ToString().ToLower().Contains(paging.Search.Value.ToLower()) ||
+                                                     v.BookAuthors.Any(x => x.AuthorFullName.ToLower().Contains(paging.Search.Value.ToLower())));
                 }
                 else
                 {
                     // selects all from table
-                    query = context.Books.Include(x => x.Genre);
+                    query = context.Books
+                                        .Include(x => x.Genre)
+                                        .Include(x => x.BookAuthors)
+                                        .ThenInclude(x => x.Author);
                 }
                 // total records from query
                 var recordsTotal = query.Count();

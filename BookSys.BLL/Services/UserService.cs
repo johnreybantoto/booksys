@@ -13,6 +13,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace BookSys.BLL.Services
 {
@@ -34,30 +35,37 @@ namespace BookSys.BLL.Services
 
         public async Task<ResponseVM> Register(UserVM userVM)
         {
-            var user = new User()
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                UserName = userVM.UserName,
-                FirstName = userVM.FirstName,
-                MiddleName = userVM.MiddleName,
-                LastName = userVM.LastName,
-                Question =  userVM.Question,
-                Answer = ComputeSha256Hash(userVM.Answer)
-            };
-            try
-            {
-                // save user and encrypts password
-                var result = await _userManager.CreateAsync(user, userVM.Password);
-                await _userManager.AddToRoleAsync(user, userVM.Role);
+                try
+                {
+                    var user = new User()
+                    {
+                        UserName = userVM.UserName,
+                        FirstName = userVM.FirstName,
+                        MiddleName = userVM.MiddleName,
+                        LastName = userVM.LastName,
+                        Question = userVM.Question,
+                        Answer = ComputeSha256Hash(userVM.Answer)
+                    };
+                    // save user and encrypts password
+                    var result = await _userManager.CreateAsync(user, userVM.Password);
+                    await _userManager.AddToRoleAsync(user, userVM.Role);
 
-                if (result.Succeeded)
-                    return new ResponseVM("created", true, "User");
-                else
-                    return new ResponseVM("created", false, "User", "", "", null, result.Errors);
+                    if (result.Succeeded)
+                    {
+                        scope.Complete();
+                        return new ResponseVM("created", true, "User");
+                    }
+                    else
+                        return new ResponseVM("created", false, "User", "", "", null, result.Errors);
 
-            }
-            catch (Exception ex)
-            {
-                return new ResponseVM("created", false, "User", ResponseVM.SOMETHING_WENT_WRONG, "", ex);
+                }
+                catch (Exception ex)
+                {
+                    scope.Dispose();
+                    return new ResponseVM("created", false, "User", ResponseVM.SOMETHING_WENT_WRONG, "", ex);
+                }
             }
         }
 
