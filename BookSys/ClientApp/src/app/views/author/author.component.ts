@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, Inject, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild} from '@angular/core';
 import { AuthorService } from 'src/app/services/author.service';
 import { Author } from 'src/app/models/author.model';
 import { AuthorDataService } from 'src/app/dataservices/author.dataservice';

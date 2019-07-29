@@ -7,7 +7,7 @@
                 <form (ngSubmit)="onFormSubmit()" method="post" [formGroup]="authorCreateForm">
                     <div class="row">
                         <div class="col-md-4">
-                            <label for="firstName">Firstname: <span style="color: red">*</span></label> <br />
+                            <label for="firstName">Firstname: <span style="color: red">*</span></label> <br/>
                             <input type="text" class="form-control" id="firstName" formControlName="firstName" [ngClass]="{ 'is-invalid': (f.firstName.touched && f.firstName.errors) || firstNameBackEndErrors }"/>
                             <div *ngIf="f.firstName.touched && f.firstName.errors" class="invalid-feedback">
                                 <div *ngIf="f.firstName.errors.required"><span class="error-msg">This field is required</span></div>

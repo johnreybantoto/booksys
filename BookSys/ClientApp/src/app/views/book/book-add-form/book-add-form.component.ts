@@ -69,11 +69,9 @@ export class BookAddFormComponent implements OnInit {
     if(!ok){
       return; 
     }
-
     // ends the function once the bookCreateForm somehow is not valid
     if (!this.bookCreateForm.valid)
       return;
-      
     try {
       this.isSubmit = true; // sets the isSubmit, disables button
       this.titleBackEndErrors = null; // resets backendErrors
@@ -108,7 +106,6 @@ export class BookAddFormComponent implements OnInit {
           this.copyrightBackEndErrors = errs.errors.copyright; // shows the data annotations error message
         }
       }
-
       this.isSubmit = false; // resets the isSubmit, enables button
     } finally{
       this.isSubmit = false; // resets the isSubmit, enables button

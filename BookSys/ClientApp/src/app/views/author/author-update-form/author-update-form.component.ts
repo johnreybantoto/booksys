@@ -15,7 +15,6 @@ export class AuthorUpdateFormComponent implements OnInit {
   firstNameBackEndErrors: string[];
   middleNameBackEndErrors: string[];
   lastNameBackEndErrors: string[];
-
   authorContext: any;
   authorUpdateForm: FormGroup;
   authorToBeEditted: Author;
@@ -48,8 +47,8 @@ export class AuthorUpdateFormComponent implements OnInit {
     this.authorUpdateForm.controls['lastName'].setValue(this.authorToBeEditted.lastName);
   }
 
-  close(){
-    this.dialogRef.close();
+  close(){ 
+    this.dialogRef.close(); 
   }
 
   async onFormSubmit() {
@@ -58,11 +57,9 @@ export class AuthorUpdateFormComponent implements OnInit {
     if(!ok){
       return; 
     }
-
     // ends the function once the authorUpdateForm somehow is not valid
     if (!this.authorUpdateForm.valid)
       return;
-      
     try {
       this.isSubmit = true; // sets the isSubmit, disables button
       this.firstNameBackEndErrors = null; // resets backendErrors
@@ -98,7 +95,6 @@ export class AuthorUpdateFormComponent implements OnInit {
           this.lastNameBackEndErrors = errs.errors.LastName; // shows the data annotations error message
         } 
       }
-
       this.isSubmit = false; // resets the isSubmit, enables button
     } finally{
       this.isSubmit = false; // resets the isSubmit, enables button

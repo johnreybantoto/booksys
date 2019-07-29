@@ -39,11 +39,9 @@ export class AuthorAddFormComponent implements OnInit {
     if(!ok){
       return; 
     }
-
     // ends the function once the authorCreateForm somehow is not valid
     if (!this.authorCreateForm.valid)
       return;
-      
     try {
       this.isSubmit = true; // sets the isSubmit, disables button
       this.firstNameBackEndErrors = null; // resets backendErrors
@@ -77,7 +75,6 @@ export class AuthorAddFormComponent implements OnInit {
           this.middleNameBackEndErrors = errs.errors.MiddleName; // shows the data annotations error message
         } 
       }
-
       this.isSubmit = false; // resets the isSubmit, enables button
     } finally{
       this.isSubmit = false; // resets the isSubmit, enables button

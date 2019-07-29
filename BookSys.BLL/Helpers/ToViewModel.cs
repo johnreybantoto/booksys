@@ -53,8 +53,12 @@ namespace BookSys.BLL.Helpers
                 FirstName = author.FirstName,
                 MiddleName = author.MiddleName,
                 LastName = author.LastName,
-                FullName = $"{author.FirstName}{ (string.IsNullOrEmpty(author.MiddleName) ? "" : " " + author.MiddleName) }{(string.IsNullOrEmpty(author.LastName) ? "" : " " + author.LastName)}"
+                FullName = ToFullName(author.FirstName, author.MiddleName, author.LastName)
             };
+        }
+        public string ToFullName(string firstName, string middleName, string lastName)
+        {
+            return $"{firstName}{ (string.IsNullOrEmpty(middleName) ? "" : " " + middleName) }{(string.IsNullOrEmpty(lastName) ? "" : " " + lastName)}";
         }
 
         // converts List<BookAuthor> to List<BookAuthorVM>
@@ -76,5 +80,6 @@ namespace BookSys.BLL.Helpers
             return authorLists;
         }
 
+       
     }
 }
